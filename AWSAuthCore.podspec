@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
    s.name         = 'AWSAuthCore'
-   s.version      = '2.16.0'
+   s.version      = '2.15.3'
    s.summary      = 'Amazon Web Services SDK for iOS.'
- 
+
    s.description  = 'The AWS SDK for iOS provides a library, code samples, and documentation for developers to build connected mobile applications using AWS.'
- 
+
    s.homepage     = 'http://aws.amazon.com/mobile/sdk'
    s.license      = 'Apache License, Version 2.0'
    s.author       = { 'Amazon Web Services' => 'amazonwebservices' }
@@ -16,4 +16,3 @@ Pod::Spec.new do |s|
    s.source_files = 'AWSAuthSDK/Sources/AWSAuthCore/*.{h,m}'
    s.public_header_files = 'AWSAuthSDK/Sources/AWSAuthCore/*.h'
  end
- 
