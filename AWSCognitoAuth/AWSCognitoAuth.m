@@ -715,6 +715,8 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
             return YES;
         }
     } else if([urlLowerCaseString hasPrefix:signOutRedirectLowerCaseString]){
+    //Fix For BetterOff Health app
+    //} else if([urlLowerCaseString hasPrefix:signOutRedirectLowerCaseString]){
         if(queryItemsDict[@"error"]){
             NSString *error = queryItemsDict[@"error"];
             NSString *errorDescription = queryItemsDict[@"error_description"];
