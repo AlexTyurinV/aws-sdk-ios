@@ -714,7 +714,9 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
             [self dismissSafariViewControllerAndCompleteGetSession:nil error:[self getError:error code: AWSCognitoAuthClientErrorBadRequest]];
             return YES;
         }
-    } else if([urlLowerCaseString hasPrefix:signOutRedirectLowerCaseString]){
+    } else if([urlLowerCaseString hasPrefix: @"btroff://sign_out"]) {
+    //} else if([urlLowerCaseString hasPrefix:signOutRedirectLowerCaseString]){
+        
         if(queryItemsDict[@"error"]){
             NSString *error = queryItemsDict[@"error"];
             NSString *errorDescription = queryItemsDict[@"error_description"];
