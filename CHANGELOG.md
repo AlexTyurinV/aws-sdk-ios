@@ -2,7 +2,85 @@
 
 ## Unreleased
 
--Features for next release
+### New Features
+- The following models now support `NSSecureCoding`
+  - Amazon EC2 ([PR #3150](https://github.com/aws-amplify/aws-sdk-ios/pull/3150))
+  - Amazon Elastic Load Balancing ([PR #3158](https://github.com/aws-amplify/aws-sdk-ios/pull/3158))
+  - AWS IoT ([PR #3153](https://github.com/aws-amplify/aws-sdk-ios/pull/3153)). Note that the following base request and response objects that include untyped (i.e., `id`) properties do not support `NSSecureCoding`. To support `NSSecureCoding` for those types, create a subclass of the base type, and override the appropriate `initWithCoder:` methods to provide a type-safe unarchiving method:
+    - `AWSIoTDataDeleteThingShadowResponse`
+    - `AWSIoTDataGetThingShadowResponse`
+    - `AWSIoTDataPublishRequest`
+    - `AWSIoTDataUpdateThingShadowRequest`
+    - `AWSIoTDataUpdateThingShadowResponse`
+  - Amazon Lambda ([PR #3154](https://github.com/aws-amplify/aws-sdk-ios/pull/3154)). Note that the following base request and response objects that include untyped (i.e., `id`) properties do not support `NSSecureCoding`. To support `NSSecureCoding` for those types, create a subclass of the base type, and override the appropriate `initWithCoder:` methods to provide a type-safe unarchiving method:
+    - `AWSLambdaInvocationRequest`
+    - `AWSLambdaInvocationResponse`
+  - Amazon S3 ([PR #3145](https://github.com/aws-amplify/aws-sdk-ios/pull/3145)). Note that the following base request and response objects that include untyped (i.e., `id`) properties do not support `NSSecureCoding`. To support `NSSecureCoding` for those types, create a subclass of the base type, and override the appropriate `initWithCoder:` methods to provide a type-safe unarchiving method:
+    - `AWSS3GetObjectOutput`
+    - `AWSS3GetObjectTorrentOutput`
+    - `AWSS3PutObjectRequest`
+    - `AWSS3RecordsEvent`
+    - `AWSS3UploadPartRequest`
+
+### Misc. Updates
+- Model updates for the following services
+  - Amazon EC2
+  - AWS IoT
+  - Amazon S3
+  - Amazon Simple Notification Service (SNS)
+
+## 2.18.0
+
+### New Features
+- The following models now support `NSSecureCoding` ([PR #3127](https://github.com/aws-amplify/aws-sdk-ios/pull/3127)):
+  - AWS Auto Scaling
+  - Amazon CloudWatch Logs
+  - Amazon CloudWatch Monitoring
+  - Amazon Cognito Identity
+  - Amazon Cognito Identity Provider
+  - Amazon Comprehend
+  - Amazon Connect
+  - Amazon Connect Participant Service
+  - Amazon DynamoDB
+  - Amazon Kinesis Firehose
+  - Amazon Kinesis Streams
+  - Amazon Kinesis Video Signaling
+  - AWS Key Management Service (KMS)
+  - Amazon Lex
+  - Amazon Pinpoint
+  - Amazon Polly
+  - Amazon Rekognition
+  - Amazon SageMaker
+  - Amazon Security Token Service (STS)
+  - Amazon Simple DB
+  - Amazon Simple Email Service (SES)
+  - Amazon Simple Notification Service (SNS)
+  - Amazon Simple Queue Service (SQS)
+  - Amazon Textract
+  - Amazon Transcribe
+  - Amazon Translate
+
+### Misc. Updates
+- **AWSAuthSDK**
+  - Upgrade Facebook SDK to 8.0.0 ([PR #3082](https://github.com/aws-amplify/aws-sdk-ios/pull/3082))
+- Support Xcode 12.0.1 for Carthage build ([PR #3085](https://github.com/aws-amplify/aws-sdk-ios/pull/3085))
+- Model updates for the following services
+  - Amazon Connect
+  - Amazon DynamoDB
+  - Amazon EC2
+  - Amazon Elastic Load Balancing
+  - Amazon Pinpoint
+  - Amazon Rekognition
+  - Amazon Simple Notification Service (SNS)
+  - Amazon Textract
+
+### Deprecation removal warning
+
+AWS Mobile SDK for iOS will remove these deprecated clients in December 2020:
+
+- `AWSCognito` (Amazon Cognito Sync) - Use [`Amplify DataStore`](https://docs.amplify.aws/lib/datastore/getting-started/q/platform/ios) for data synchronization.
+- `AWSMobileAnalytics` - Use [`Amplify Analytics`](https://docs.amplify.aws/lib/analytics/getting-started/q/platform/ios) for analytics.
+- `AWSS3TransferManager` - Use [`Amplify Storage`](https://docs.amplify.aws/lib/storage/getting-started/q/platform/ios) for uploads and downloads with Amazon S3.
 
 ## 2.17.0
 
@@ -209,7 +287,7 @@
 ## 2.13.4
 ### New features
 - **Integration tests**
-    - AWS Mobile SDK for iOS integration tests are now provisioned from a CloudFormation stack created by [the new amplify-ci-support package](LINK TBD). See [the README](LINK TBD) for details on how to provision your account to run integration tests.
+    - AWS Mobile SDK for iOS integration tests are now provisioned from a CloudFormation stack created by [the new amplify-ci-support package](https://github.com/aws-amplify/amplify-ci-support). See [the README](LINK TBD) for details on how to provision your account to run integration tests.
 
 - **AWSMobileClient**
     - Added api to fetch userSub for the loggedin user. [PR #2599](https://github.com/aws-amplify/aws-sdk-ios/pull/2599)

@@ -14,7 +14,6 @@
 //
 
 #import "AWSTextractService.h"
-#import <AWSCore/AWSNetworking.h>
 #import <AWSCore/AWSCategory.h>
 #import <AWSCore/AWSNetworking.h>
 #import <AWSCore/AWSSignature.h>
@@ -26,7 +25,7 @@
 #import "AWSTextractResources.h"
 
 static NSString *const AWSInfoTextract = @"Textract";
-NSString *const AWSTextractSDKVersion = @"2.17.0";
+NSString *const AWSTextractSDKVersion = @"2.18.0";
 
 
 @interface AWSTextractResponseSerializer : AWSJSONResponseSerializer
@@ -43,6 +42,7 @@ static NSDictionary *errorCodeDictionary = nil;
                             @"AccessDeniedException" : @(AWSTextractErrorAccessDenied),
                             @"BadDocumentException" : @(AWSTextractErrorBadDocument),
                             @"DocumentTooLargeException" : @(AWSTextractErrorDocumentTooLarge),
+                            @"HumanLoopQuotaExceededException" : @(AWSTextractErrorHumanLoopQuotaExceeded),
                             @"IdempotentParameterMismatchException" : @(AWSTextractErrorIdempotentParameterMismatch),
                             @"InternalServerError" : @(AWSTextractErrorInternalServer),
                             @"InvalidJobIdException" : @(AWSTextractErrorInvalidJobId),
