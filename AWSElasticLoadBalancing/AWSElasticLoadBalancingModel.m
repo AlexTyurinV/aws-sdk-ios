@@ -234,7 +234,6 @@ NSString *const AWSElasticLoadBalancingErrorDomain = @"com.amazonaws.AWSElasticL
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
              @"loadBalancerAddresses" : @"LoadBalancerAddresses",
-             @"outpostId" : @"OutpostId",
              @"subnetId" : @"SubnetId",
              @"zoneName" : @"ZoneName",
              };
@@ -351,7 +350,6 @@ NSString *const AWSElasticLoadBalancingErrorDomain = @"com.amazonaws.AWSElasticL
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
-             @"customerOwnedIpv4Pool" : @"CustomerOwnedIpv4Pool",
              @"ipAddressType" : @"IpAddressType",
              @"name" : @"Name",
              @"scheme" : @"Scheme",
@@ -1149,7 +1147,6 @@ NSString *const AWSElasticLoadBalancingErrorDomain = @"com.amazonaws.AWSElasticL
              @"availabilityZones" : @"AvailabilityZones",
              @"canonicalHostedZoneId" : @"CanonicalHostedZoneId",
              @"createdTime" : @"CreatedTime",
-             @"customerOwnedIpv4Pool" : @"CustomerOwnedIpv4Pool",
              @"DNSName" : @"DNSName",
              @"ipAddressType" : @"IpAddressType",
              @"loadBalancerArn" : @"LoadBalancerArn",
