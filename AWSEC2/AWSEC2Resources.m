@@ -209,6 +209,16 @@
       \"input\":{\"shape\":\"AssociateDhcpOptionsRequest\"},\
       \"documentation\":\"<p>Associates a set of DHCP options (that you've previously created) with the specified VPC, or associates no DHCP options with the VPC.</p> <p>After you associate the options with the VPC, any existing instances and all new instances that you launch in that VPC use the options. You don't need to restart or relaunch the instances. They automatically pick up the changes within a few hours, depending on how frequently the instance renews its DHCP lease. You can explicitly renew the lease using the operating system on the instance.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html\\\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>\"\
     },\
+    \"AssociateEnclaveCertificateIamRole\":{\
+      \"name\":\"AssociateEnclaveCertificateIamRole\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"AssociateEnclaveCertificateIamRoleRequest\"},\
+      \"output\":{\"shape\":\"AssociateEnclaveCertificateIamRoleResult\"},\
+      \"documentation\":\"<p>Associates an AWS Identity and Access Management (IAM) role with an AWS Certificate Manager (ACM) certificate. This enables the certificate to be used by the ACM for Nitro Enclaves application inside an enclave. For more information, see <a href=\\\"https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave-refapp.html\\\">AWS Certificate Manager for Nitro Enclaves</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When the IAM role is associated with the ACM certificate, places the certificate, certificate chain, and encrypted private key in an Amazon S3 bucket that only the associated IAM role can access. The private key of the certificate is encrypted with an AWS-managed KMS key that has an attached attestation-based key policy.</p> <p>To enable the IAM role to access the Amazon S3 object, you must grant it permission to call <code>s3:GetObject</code> on the Amazon S3 bucket returned by the command. To enable the IAM role to access the AWS KMS key, you must grant it permission to call <code>kms:Decrypt</code> on AWS KMS key returned by the command. For more information, see <a href=\\\"https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave-refapp.html#add-policy\\\"> Grant the role permission to access the certificate and encryption key</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>\"\
+    },\
     \"AssociateIamInstanceProfile\":{\
       \"name\":\"AssociateIamInstanceProfile\",\
       \"http\":{\
@@ -2835,6 +2845,16 @@
       \"output\":{\"shape\":\"DisassociateClientVpnTargetNetworkResult\"},\
       \"documentation\":\"<p>Disassociates a target network from the specified Client VPN endpoint. When you disassociate the last target network from a Client VPN, the following happens:</p> <ul> <li> <p>The route that was automatically added for the VPC is deleted</p> </li> <li> <p>All active client connections are terminated</p> </li> <li> <p>New client connections are disallowed</p> </li> <li> <p>The Client VPN endpoint's status changes to <code>pending-associate</code> </p> </li> </ul>\"\
     },\
+    \"DisassociateEnclaveCertificateIamRole\":{\
+      \"name\":\"DisassociateEnclaveCertificateIamRole\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"DisassociateEnclaveCertificateIamRoleRequest\"},\
+      \"output\":{\"shape\":\"DisassociateEnclaveCertificateIamRoleResult\"},\
+      \"documentation\":\"<p>Disassociates an IAM role from an AWS Certificate Manager (ACM) certificate. Disassociating an IAM role from an ACM certificate removes the Amazon S3 object that contains the certificate, certificate chain, and encrypted private key from the Amazon S3 bucket. It also revokes the IAM role's permission to use the AWS Key Management Service (KMS) key used to encrypt the private key. This effectively revokes the role's permission to use the certificate. </p>\"\
+    },\
     \"DisassociateIamInstanceProfile\":{\
       \"name\":\"DisassociateIamInstanceProfile\",\
       \"http\":{\
@@ -3001,6 +3021,16 @@
       \"input\":{\"shape\":\"ExportTransitGatewayRoutesRequest\"},\
       \"output\":{\"shape\":\"ExportTransitGatewayRoutesResult\"},\
       \"documentation\":\"<p>Exports routes from the specified transit gateway route table to the specified S3 bucket. By default, all routes are exported. Alternatively, you can filter by CIDR range.</p> <p>The routes are saved to the specified bucket in a JSON file. For more information, see <a href=\\\"https://docs.aws.amazon.com/vpc/latest/tgw/tgw-route-tables.html#tgw-export-route-tables\\\">Export Route Tables to Amazon S3</a> in <i>Transit Gateways</i>.</p>\"\
+    },\
+    \"GetAssociatedEnclaveCertificateIamRoles\":{\
+      \"name\":\"GetAssociatedEnclaveCertificateIamRoles\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"GetAssociatedEnclaveCertificateIamRolesRequest\"},\
+      \"output\":{\"shape\":\"GetAssociatedEnclaveCertificateIamRolesResult\"},\
+      \"documentation\":\"<p>Returns the IAM roles that are associated with the specified AWS Certificate Manager (ACM) certificate. It also returns the name of the Amazon S3 bucket and the Amazon S3 object key where the certificate, certificate chain, and encrypted private key bundle are stored, and the ARN of the AWS Key Management Service (KMS) key that's used to encrypt the private key.</p>\"\
     },\
     \"GetAssociatedIpv6PoolCidrs\":{\
       \"name\":\"GetAssociatedIpv6PoolCidrs\",\
@@ -4773,6 +4803,13 @@
         \"off\"\
       ]\
     },\
+    \"ApplianceModeSupportValue\":{\
+      \"type\":\"string\",\
+      \"enum\":[\
+        \"enable\",\
+        \"disable\"\
+      ]\
+    },\
     \"ApplySecurityGroupsToClientVpnTargetNetworkRequest\":{\
       \"type\":\"structure\",\
       \"required\":[\
@@ -5039,6 +5076,43 @@
         }\
       }\
     },\
+    \"AssociateEnclaveCertificateIamRoleRequest\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"CertificateArn\":{\
+          \"shape\":\"ResourceArn\",\
+          \"documentation\":\"<p>The ARN of the ACM certificate with which to associate the IAM role.</p>\"\
+        },\
+        \"RoleArn\":{\
+          \"shape\":\"ResourceArn\",\
+          \"documentation\":\"<p>The ARN of the IAM role to associate with the ACM certificate. You can associate up to 16 IAM roles with an ACM certificate.</p>\"\
+        },\
+        \"DryRun\":{\
+          \"shape\":\"Boolean\",\
+          \"documentation\":\"<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>\"\
+        }\
+      }\
+    },\
+    \"AssociateEnclaveCertificateIamRoleResult\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"CertificateS3BucketName\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The name of the Amazon S3 bucket to which the certificate was uploaded.</p>\",\
+          \"locationName\":\"certificateS3BucketName\"\
+        },\
+        \"CertificateS3ObjectKey\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The Amazon S3 object key where the certificate, certificate chain, and encrypted private key bundle are stored. The object key is formatted as follows: <code>certificate_arn</code>/<code>role_arn</code>.</p>\",\
+          \"locationName\":\"certificateS3ObjectKey\"\
+        },\
+        \"EncryptionKmsKeyId\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The ID of the AWS Key Management Service (KMS) key used to encrypt the private key of the certificate.</p>\",\
+          \"locationName\":\"encryptionKmsKeyId\"\
+        }\
+      }\
+    },\
     \"AssociateIamInstanceProfileRequest\":{\
       \"type\":\"structure\",\
       \"required\":[\
@@ -5258,6 +5332,39 @@
       \"type\":\"string\",\
       \"enum\":[\"vpc\"]\
     },\
+    \"AssociatedRole\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"AssociatedRoleArn\":{\
+          \"shape\":\"ResourceArn\",\
+          \"documentation\":\"<p>The ARN of the associated IAM role.</p>\",\
+          \"locationName\":\"associatedRoleArn\"\
+        },\
+        \"CertificateS3BucketName\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The name of the Amazon S3 bucket in which the Amazon S3 object is stored.</p>\",\
+          \"locationName\":\"certificateS3BucketName\"\
+        },\
+        \"CertificateS3ObjectKey\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The key of the Amazon S3 object ey where the certificate, certificate chain, and encrypted private key bundle is stored. The object key is formated as follows: <code>certificate_arn</code>/<code>role_arn</code>. </p>\",\
+          \"locationName\":\"certificateS3ObjectKey\"\
+        },\
+        \"EncryptionKmsKeyId\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The ID of the KMS key used to encrypt the private key.</p>\",\
+          \"locationName\":\"encryptionKmsKeyId\"\
+        }\
+      },\
+      \"documentation\":\"<p>Information about the associated IAM roles.</p>\"\
+    },\
+    \"AssociatedRolesList\":{\
+      \"type\":\"list\",\
+      \"member\":{\
+        \"shape\":\"AssociatedRole\",\
+        \"locationName\":\"item\"\
+      }\
+    },\
     \"AssociatedTargetNetwork\":{\
       \"type\":\"structure\",\
       \"members\":{\
@@ -5405,6 +5512,10 @@
           \"shape\":\"NetworkInterfaceId\",\
           \"documentation\":\"<p>The ID of the network interface.</p>\",\
           \"locationName\":\"networkInterfaceId\"\
+        },\
+        \"NetworkCardIndex\":{\
+          \"shape\":\"Integer\",\
+          \"documentation\":\"<p>The index of the network card. Some instance types support multiple network cards. The primary network interface must be assigned to network card index 0. The default is network card index 0.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Contains the parameters for AttachNetworkInterface.</p>\"\
@@ -5416,6 +5527,11 @@
           \"shape\":\"String\",\
           \"documentation\":\"<p>The ID of the network interface attachment.</p>\",\
           \"locationName\":\"attachmentId\"\
+        },\
+        \"NetworkCardIndex\":{\
+          \"shape\":\"Integer\",\
+          \"documentation\":\"<p>The index of the network card.</p>\",\
+          \"locationName\":\"networkCardIndex\"\
         }\
       },\
       \"documentation\":\"<p>Contains the output of AttachNetworkInterface.</p>\"\
@@ -6939,7 +7055,7 @@
           \"locationName\":\"federatedAuthentication\"\
         }\
       },\
-      \"documentation\":\"<p>Describes the authentication methods used by a Client VPN endpoint. For more information, see <a href=\\\"https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/authentication-authrization.html#client-authentication\\\">Authentication</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>\"\
+      \"documentation\":\"<p>Describes the authentication methods used by a Client VPN endpoint. For more information, see <a href=\\\"https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/client-authentication.html\\\">Authentication</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>\"\
     },\
     \"ClientVpnAuthenticationList\":{\
       \"type\":\"list\",\
@@ -7209,6 +7325,11 @@
           \"shape\":\"VpcId\",\
           \"documentation\":\"<p>The ID of the VPC.</p>\",\
           \"locationName\":\"vpcId\"\
+        },\
+        \"SelfServicePortalUrl\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The URL of the self-service portal.</p>\",\
+          \"locationName\":\"selfServicePortalUrl\"\
         }\
       },\
       \"documentation\":\"<p>Describes a Client VPN endpoint.</p>\"\
@@ -7998,6 +8119,10 @@
         \"VpcId\":{\
           \"shape\":\"VpcId\",\
           \"documentation\":\"<p>The ID of the VPC to associate with the Client VPN endpoint. If no security group IDs are specified in the request, the default security group for the VPC is applied.</p>\"\
+        },\
+        \"SelfServicePortal\":{\
+          \"shape\":\"SelfServicePortal\",\
+          \"documentation\":\"<p>Specify whether to enable the self-service portal for the Client VPN endpoint.</p> <p>Default Value: <code>enabled</code> </p>\"\
         }\
       }\
     },\
@@ -10019,6 +10144,10 @@
         \"Ipv6Support\":{\
           \"shape\":\"Ipv6SupportValue\",\
           \"documentation\":\"<p>Enable or disable IPv6 support. The default is <code>enable</code>.</p>\"\
+        },\
+        \"ApplianceModeSupport\":{\
+          \"shape\":\"ApplianceModeSupportValue\",\
+          \"documentation\":\"<p>Enable or disable support for appliance mode. If enabled, a traffic flow between a source and destination uses the same Availability Zone for the VPC attachment for the lifetime of that flow. The default is <code>disable</code>.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes the options for a VPC attachment.</p>\"\
@@ -17692,6 +17821,33 @@
         }\
       }\
     },\
+    \"DisassociateEnclaveCertificateIamRoleRequest\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"CertificateArn\":{\
+          \"shape\":\"ResourceArn\",\
+          \"documentation\":\"<p>The ARN of the ACM certificate from which to disassociate the IAM role.</p>\"\
+        },\
+        \"RoleArn\":{\
+          \"shape\":\"ResourceArn\",\
+          \"documentation\":\"<p>The ARN of the IAM role to disassociate.</p>\"\
+        },\
+        \"DryRun\":{\
+          \"shape\":\"Boolean\",\
+          \"documentation\":\"<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>\"\
+        }\
+      }\
+    },\
+    \"DisassociateEnclaveCertificateIamRoleResult\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"Return\":{\
+          \"shape\":\"Boolean\",\
+          \"documentation\":\"<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>\",\
+          \"locationName\":\"return\"\
+        }\
+      }\
+    },\
     \"DisassociateIamInstanceProfileRequest\":{\
       \"type\":\"structure\",\
       \"required\":[\"AssociationId\"],\
@@ -18769,6 +18925,27 @@
         }\
       }\
     },\
+    \"EnclaveOptions\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"Enabled\":{\
+          \"shape\":\"Boolean\",\
+          \"documentation\":\"<p>If this parameter is set to <code>true</code>, the instance is enabled for AWS Nitro Enclaves; otherwise, it is not enabled for AWS Nitro Enclaves.</p>\",\
+          \"locationName\":\"enabled\"\
+        }\
+      },\
+      \"documentation\":\"<p>Indicates whether the instance is enabled for AWS Nitro Enclaves.</p>\"\
+    },\
+    \"EnclaveOptionsRequest\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"Enabled\":{\
+          \"shape\":\"Boolean\",\
+          \"documentation\":\"<p>To enable the instance for AWS Nitro Enclaves, set this parameter to <code>true</code>.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitro-enclave.html\\\"> AWS Nitro Enclaves</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>\"\
+    },\
     \"EndDateType\":{\
       \"type\":\"string\",\
       \"enum\":[\
@@ -19298,9 +19475,14 @@
           \"shape\":\"String\",\
           \"documentation\":\"<p>The Amazon Resource Name (ARN) of the IAM SAML identity provider.</p>\",\
           \"locationName\":\"samlProviderArn\"\
+        },\
+        \"SelfServiceSamlProviderArn\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The Amazon Resource Name (ARN) of the IAM SAML identity provider for the self-service portal.</p>\",\
+          \"locationName\":\"selfServiceSamlProviderArn\"\
         }\
       },\
-      \"documentation\":\"<p>Describes the IAM SAML identity provider used for federated authentication.</p>\"\
+      \"documentation\":\"<p>Describes the IAM SAML identity providers used for federated authentication.</p>\"\
     },\
     \"FederatedAuthenticationRequest\":{\
       \"type\":\"structure\",\
@@ -19308,6 +19490,10 @@
         \"SAMLProviderArn\":{\
           \"shape\":\"String\",\
           \"documentation\":\"<p>The Amazon Resource Name (ARN) of the IAM SAML identity provider.</p>\"\
+        },\
+        \"SelfServiceSAMLProviderArn\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>The Amazon Resource Name (ARN) of the IAM SAML identity provider for the self-service portal.</p>\"\
         }\
       },\
       \"documentation\":\"<p>The IAM SAML identity provider used for federated authentication.</p>\"\
@@ -20017,6 +20203,29 @@
     \"GatewayType\":{\
       \"type\":\"string\",\
       \"enum\":[\"ipsec.1\"]\
+    },\
+    \"GetAssociatedEnclaveCertificateIamRolesRequest\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"CertificateArn\":{\
+          \"shape\":\"ResourceArn\",\
+          \"documentation\":\"<p>The ARN of the ACM certificate for which to view the associated IAM roles, encryption keys, and Amazon S3 object information.</p>\"\
+        },\
+        \"DryRun\":{\
+          \"shape\":\"Boolean\",\
+          \"documentation\":\"<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>\"\
+        }\
+      }\
+    },\
+    \"GetAssociatedEnclaveCertificateIamRolesResult\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"AssociatedRoles\":{\
+          \"shape\":\"AssociatedRolesList\",\
+          \"documentation\":\"<p>Information about the associated IAM roles.</p>\",\
+          \"locationName\":\"associatedRoleSet\"\
+        }\
+      }\
     },\
     \"GetAssociatedIpv6PoolCidrsRequest\":{\
       \"type\":\"structure\",\
@@ -22749,6 +22958,11 @@
           \"shape\":\"InstanceMetadataOptionsResponse\",\
           \"documentation\":\"<p>The metadata options for the instance.</p>\",\
           \"locationName\":\"metadataOptions\"\
+        },\
+        \"EnclaveOptions\":{\
+          \"shape\":\"EnclaveOptions\",\
+          \"documentation\":\"<p>Indicates whether the instance is enabled for AWS Nitro Enclaves.</p>\",\
+          \"locationName\":\"enclaveOptions\"\
         }\
       },\
       \"documentation\":\"<p>Describes an instance.</p>\"\
@@ -22775,6 +22989,11 @@
           \"shape\":\"AttributeBooleanValue\",\
           \"documentation\":\"<p>Indicates whether enhanced networking with ENA is enabled.</p>\",\
           \"locationName\":\"enaSupport\"\
+        },\
+        \"EnclaveOptions\":{\
+          \"shape\":\"EnclaveOptions\",\
+          \"documentation\":\"<p>To enable the instance for AWS Nitro Enclaves, set this parameter to <code>true</code>; otherwise, set it to <code>false</code>.</p>\",\
+          \"locationName\":\"enclaveOptions\"\
         },\
         \"EbsOptimized\":{\
           \"shape\":\"AttributeBooleanValue\",\
@@ -22850,7 +23069,8 @@
         \"groupSet\",\
         \"ebsOptimized\",\
         \"sriovNetSupport\",\
-        \"enaSupport\"\
+        \"enaSupport\",\
+        \"enclaveOptions\"\
       ]\
     },\
     \"InstanceBlockDeviceMapping\":{\
@@ -23364,6 +23584,11 @@
           \"shape\":\"AttachmentStatus\",\
           \"documentation\":\"<p>The attachment state.</p>\",\
           \"locationName\":\"status\"\
+        },\
+        \"NetworkCardIndex\":{\
+          \"shape\":\"Integer\",\
+          \"documentation\":\"<p>The index of the network card.</p>\",\
+          \"locationName\":\"networkCardIndex\"\
         }\
       },\
       \"documentation\":\"<p>Describes a network interface attachment.</p>\"\
@@ -23446,7 +23671,11 @@
         },\
         \"InterfaceType\":{\
           \"shape\":\"String\",\
-          \"documentation\":\"<p>The type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html\\\">Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p> <p>Valid values: <code>interface</code> | <code>efa</code> </p>\"\
+          \"documentation\":\"<p>The type of network interface.</p> <p>To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html\\\">Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p> <p>Valid values: <code>interface</code> | <code>efa</code> </p>\"\
+        },\
+        \"NetworkCardIndex\":{\
+          \"shape\":\"Integer\",\
+          \"documentation\":\"<p>The index of the network card. Some instance types support multiple network cards. The primary network interface must be assigned to network card index 0. The default is network card index 0.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes a network interface.</p>\"\
@@ -23975,6 +24204,7 @@
         \"p3.8xlarge\",\
         \"p3.16xlarge\",\
         \"p3dn.24xlarge\",\
+        \"p4d.24xlarge\",\
         \"d2.xlarge\",\
         \"d2.2xlarge\",\
         \"d2.4xlarge\",\
@@ -25109,6 +25339,27 @@
         \"locationName\":\"item\"\
       }\
     },\
+    \"LaunchTemplateEnclaveOptions\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"Enabled\":{\
+          \"shape\":\"Boolean\",\
+          \"documentation\":\"<p>If this parameter is set to <code>true</code>, the instance is enabled for AWS Nitro Enclaves; otherwise, it is not enabled for AWS Nitro Enclaves.</p>\",\
+          \"locationName\":\"enabled\"\
+        }\
+      },\
+      \"documentation\":\"<p>Indicates whether the instance is enabled for AWS Nitro Enclaves.</p>\"\
+    },\
+    \"LaunchTemplateEnclaveOptionsRequest\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"Enabled\":{\
+          \"shape\":\"Boolean\",\
+          \"documentation\":\"<p>To enable the instance for AWS Nitro Enclaves, set this parameter to <code>true</code>.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For more information, see <a href=\\\"https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html\\\"> What is AWS Nitro Enclaves?</a> in the <i>AWS Nitro Enclaves User Guide</i>.</p>\"\
+    },\
     \"LaunchTemplateErrorCode\":{\
       \"type\":\"string\",\
       \"enum\":[\
@@ -25346,6 +25597,11 @@
           \"shape\":\"SubnetId\",\
           \"documentation\":\"<p>The ID of the subnet for the network interface.</p>\",\
           \"locationName\":\"subnetId\"\
+        },\
+        \"NetworkCardIndex\":{\
+          \"shape\":\"Integer\",\
+          \"documentation\":\"<p>The index of the network card.</p>\",\
+          \"locationName\":\"networkCardIndex\"\
         }\
       },\
       \"documentation\":\"<p>Describes a network interface.</p>\"\
@@ -25416,6 +25672,10 @@
         \"SubnetId\":{\
           \"shape\":\"SubnetId\",\
           \"documentation\":\"<p>The ID of the subnet for the network interface.</p>\"\
+        },\
+        \"NetworkCardIndex\":{\
+          \"shape\":\"Integer\",\
+          \"documentation\":\"<p>The index of the network card. Some instance types support multiple network cards. The primary network interface must be assigned to network card index 0. The default is network card index 0.</p>\"\
         }\
       },\
       \"documentation\":\"<p>The parameters for a network interface.</p>\"\
@@ -26565,6 +26825,10 @@
         \"VpcId\":{\
           \"shape\":\"VpcId\",\
           \"documentation\":\"<p>The ID of the VPC to associate with the Client VPN endpoint.</p>\"\
+        },\
+        \"SelfServicePortal\":{\
+          \"shape\":\"SelfServicePortal\",\
+          \"documentation\":\"<p>Specify whether to enable the self-service portal for the Client VPN endpoint.</p>\"\
         }\
       }\
     },\
@@ -27691,6 +27955,10 @@
         \"Ipv6Support\":{\
           \"shape\":\"Ipv6SupportValue\",\
           \"documentation\":\"<p>Enable or disable IPv6 support. The default is <code>enable</code>.</p>\"\
+        },\
+        \"ApplianceModeSupport\":{\
+          \"shape\":\"ApplianceModeSupportValue\",\
+          \"documentation\":\"<p>Enable or disable support for appliance mode. If enabled, a traffic flow between a source and destination uses the same Availability Zone for the VPC attachment for the lifetime of that flow. The default is <code>disable</code>.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes the options for a VPC attachment.</p>\"\
@@ -28796,7 +29064,7 @@
         },\
         \"PublicIp\":{\
           \"shape\":\"String\",\
-          \"documentation\":\"<p>The address of the Elastic IP address or Carrier IP address bound to the network interface.</p>\",\
+          \"documentation\":\"<p>The address of the Elastic IP address bound to the network interface.</p>\",\
           \"locationName\":\"publicIp\"\
         },\
         \"CustomerOwnedIp\":{\
@@ -28834,6 +29102,11 @@
           \"shape\":\"Integer\",\
           \"documentation\":\"<p>The device index of the network interface attachment on the instance.</p>\",\
           \"locationName\":\"deviceIndex\"\
+        },\
+        \"NetworkCardIndex\":{\
+          \"shape\":\"Integer\",\
+          \"documentation\":\"<p>The index of the network card.</p>\",\
+          \"locationName\":\"networkCardIndex\"\
         },\
         \"InstanceId\":{\
           \"shape\":\"String\",\
@@ -31410,6 +31683,10 @@
         \"MetadataOptions\":{\
           \"shape\":\"LaunchTemplateInstanceMetadataOptionsRequest\",\
           \"documentation\":\"<p>The metadata options for the instance. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\\\">Instance Metadata and User Data</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>\"\
+        },\
+        \"EnclaveOptions\":{\
+          \"shape\":\"LaunchTemplateEnclaveOptionsRequest\",\
+          \"documentation\":\"<p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For more information, see <a href=\\\"https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html\\\"> What is AWS Nitro Enclaves?</a> in the <i>AWS Nitro Enclaves User Guide</i>.</p> <p>You can't enable AWS Nitro Enclaves and hibernation on the same instance.</p>\"\
         }\
       },\
       \"documentation\":\"<p>The information to include in the launch template.</p>\"\
@@ -32533,6 +32810,11 @@
           \"shape\":\"LaunchTemplateInstanceMetadataOptions\",\
           \"documentation\":\"<p>The metadata options for the instance. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\\\">Instance Metadata and User Data</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>\",\
           \"locationName\":\"metadataOptions\"\
+        },\
+        \"EnclaveOptions\":{\
+          \"shape\":\"LaunchTemplateEnclaveOptions\",\
+          \"documentation\":\"<p>Indicates whether the instance is enabled for AWS Nitro Enclaves.</p>\",\
+          \"locationName\":\"enclaveOptions\"\
         }\
       },\
       \"documentation\":\"<p>The information for a launch template. </p>\"\
@@ -33194,7 +33476,7 @@
         },\
         \"HibernationOptions\":{\
           \"shape\":\"HibernationOptionsRequest\",\
-          \"documentation\":\"<p>Indicates whether an instance is enabled for hibernation. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html\\\">Hibernate your instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>\"\
+          \"documentation\":\"<p>Indicates whether an instance is enabled for hibernation. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html\\\">Hibernate your instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can't enable hibernation and AWS Nitro Enclaves on the same instance.</p>\"\
         },\
         \"LicenseSpecifications\":{\
           \"shape\":\"LicenseSpecificationListRequest\",\
@@ -33204,6 +33486,10 @@
         \"MetadataOptions\":{\
           \"shape\":\"InstanceMetadataOptionsRequest\",\
           \"documentation\":\"<p>The metadata options for the instance. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\\\">Instance metadata and user data</a>.</p>\"\
+        },\
+        \"EnclaveOptions\":{\
+          \"shape\":\"EnclaveOptionsRequest\",\
+          \"documentation\":\"<p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitro-enclave.html\\\"> AWS Nitro Enclaves</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can't enable AWS Nitro Enclaves and hibernation on the same instance. For more information about AWS Nitro Enclaves requirements, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitro-enclave.html#nitro-enclave-reqs\\\"> AWS Nitro Enclaves</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>\"\
         }\
       }\
     },\
@@ -34015,6 +34301,13 @@
         \"shape\":\"SecurityGroupName\",\
         \"locationName\":\"SecurityGroup\"\
       }\
+    },\
+    \"SelfServicePortal\":{\
+      \"type\":\"string\",\
+      \"enum\":[\
+        \"enabled\",\
+        \"disabled\"\
+      ]\
     },\
     \"SendDiagnosticInterruptRequest\":{\
       \"type\":\"structure\",\
@@ -37542,6 +37835,11 @@
           \"shape\":\"Ipv6SupportValue\",\
           \"documentation\":\"<p>Indicates whether IPv6 support is disabled.</p>\",\
           \"locationName\":\"ipv6Support\"\
+        },\
+        \"ApplianceModeSupport\":{\
+          \"shape\":\"ApplianceModeSupportValue\",\
+          \"documentation\":\"<p>Indicates whether appliance mode support is enabled.</p>\",\
+          \"locationName\":\"applianceModeSupport\"\
         }\
       },\
       \"documentation\":\"<p>Describes the VPC attachment options.</p>\"\

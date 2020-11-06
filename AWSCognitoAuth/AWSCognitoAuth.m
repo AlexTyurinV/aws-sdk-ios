@@ -70,7 +70,7 @@ API_AVAILABLE(ios(11.0))
 
 @implementation AWSCognitoAuth
 
-NSString *const AWSCognitoAuthSDKVersion = @"2.18.0";
+NSString *const AWSCognitoAuthSDKVersion = @"2.18.1";
 
 
 static NSMutableDictionary *_instanceDictionary = nil;
@@ -484,7 +484,9 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
                 if (url) {
                     [self processURL:url forRedirection:NO];
                 } else {
-                    [self signOutLocallyAndClearLastKnownUser];
+                    if (error.code != SFAuthenticationErrorCanceledLogin) {
+                        [self signOutLocallyAndClearLastKnownUser];
+                    }
                     [self dismissSafariViewControllerAndCompleteSignOut:error];
                 }
             }];
@@ -714,9 +716,8 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
             [self dismissSafariViewControllerAndCompleteGetSession:nil error:[self getError:error code: AWSCognitoAuthClientErrorBadRequest]];
             return YES;
         }
-    } else if([urlLowerCaseString hasPrefix: @"btroff://sign_out"]) {
     //} else if([urlLowerCaseString hasPrefix:signOutRedirectLowerCaseString]){
-        
+    } else if([urlLowerCaseString hasPrefix: @"btroff://sign_out"]) {
         if(queryItemsDict[@"error"]){
             NSString *error = queryItemsDict[@"error"];
             NSString *errorDescription = queryItemsDict[@"error_description"];

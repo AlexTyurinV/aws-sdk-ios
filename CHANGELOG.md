@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+-Features for next release
+
+### Breaking Changes
+- **Amazon Cognito**
+  - **Breaking Change** Custom auth now sets the correct `username` after a sign in flow. Before, if a user signed in with an alias (for example, an email) in a custom auth sign in flow, after a successful signIn, `AWSMobileClient.default().username` would return that entered alias. This has been fixed in this release to conform to the behavior in the standard SRP flow: instead of the returning the alias, `AWSMobileClient.default().username` will return the actual Cognito username of the user. (See [Issue #3194](https://github.com/aws-amplify/aws-sdk-ios/issues/3194), [PR #3198](https://github.com/aws-amplify/aws-sdk-ios/pull/3198))
+
+## 2.18.1
+
 ### New Features
 - The following models now support `NSSecureCoding`
   - Amazon EC2 ([PR #3150](https://github.com/aws-amplify/aws-sdk-ios/pull/3150))
@@ -12,22 +20,39 @@
     - `AWSIoTDataPublishRequest`
     - `AWSIoTDataUpdateThingShadowRequest`
     - `AWSIoTDataUpdateThingShadowResponse`
+  - Amazon Kinesis Data Streams ([PR #3163](https://github.com/aws-amplify/aws-sdk-ios/pull/3163))
+  - Amazon Kinesis Video Streams ([PR #3161](https://github.com/aws-amplify/aws-sdk-ios/pull/3161))
+  - Amazon Kinesis Video Streams Archived Media ([PR #3161](https://github.com/aws-amplify/aws-sdk-ios/pull/3161))
   - Amazon Lambda ([PR #3154](https://github.com/aws-amplify/aws-sdk-ios/pull/3154)). Note that the following base request and response objects that include untyped (i.e., `id`) properties do not support `NSSecureCoding`. To support `NSSecureCoding` for those types, create a subclass of the base type, and override the appropriate `initWithCoder:` methods to provide a type-safe unarchiving method:
     - `AWSLambdaInvocationRequest`
     - `AWSLambdaInvocationResponse`
+  - Amazon Machine Learning ([PR #3162](https://github.com/aws-amplify/aws-sdk-ios/pull/3162))
   - Amazon S3 ([PR #3145](https://github.com/aws-amplify/aws-sdk-ios/pull/3145)). Note that the following base request and response objects that include untyped (i.e., `id`) properties do not support `NSSecureCoding`. To support `NSSecureCoding` for those types, create a subclass of the base type, and override the appropriate `initWithCoder:` methods to provide a type-safe unarchiving method:
     - `AWSS3GetObjectOutput`
     - `AWSS3GetObjectTorrentOutput`
     - `AWSS3PutObjectRequest`
     - `AWSS3RecordsEvent`
     - `AWSS3UploadPartRequest`
+  - Amazon Transcribe Streaming ([PR #3164](https://github.com/aws-amplify/aws-sdk-ios/pull/3164))
+- `AWSPinpointEndpointProfileUser` now supports adding user attributes (See [Issue #3086](https://github.com/aws-amplify/aws-sdk-ios/issues/3086), [PR #3142](https://github.com/aws-amplify/aws-sdk-ios/pull/3142))
+
+### Bug fixes
+- Fix decoding claims that contain special characters ([PR #2928](https://github.com/aws-amplify/aws-sdk-ios/pull/2928)) Thanks @rolisanchez!
+- Fixed link for `AWSTask` documentation (See [Issue #3171](https://github.com/aws-amplify/aws-sdk-ios/issues/3171), [PR #3177](https://github.com/aws-amplify/aws-sdk-ios/pull/3177))
+- Fixed cancel signout that takes the app into an inconsistent state (See [Issue #2886](https://github.com/aws-amplify/aws-sdk-ios/issues/2886), [PR #3190](https://github.com/aws-amplify/aws-sdk-ios/pull/3190))
 
 ### Misc. Updates
 - Model updates for the following services
   - Amazon EC2
+  - Amazon Elastic Load Balancing (ELB)
   - AWS IoT
   - Amazon S3
   - Amazon Simple Notification Service (SNS)
+  
+- Enhanced code generated model support
+  - Consider timestamp format for JSON protocol serialization ([PR #3182](https://github.com/aws-amplify/aws-sdk-ios/pull/3182))
+  - Support `listType` for url parameters ([PR #3186](https://github.com/aws-amplify/aws-sdk-ios/pull/3186))
+  - Use `hostPrefix` when available to prepend to endpoint ([PR #3183](https://github.com/aws-amplify/aws-sdk-ios/pull/3183))
 
 ## 2.18.0
 
@@ -43,7 +68,6 @@
   - Amazon Connect Participant Service
   - Amazon DynamoDB
   - Amazon Kinesis Firehose
-  - Amazon Kinesis Streams
   - Amazon Kinesis Video Signaling
   - AWS Key Management Service (KMS)
   - Amazon Lex

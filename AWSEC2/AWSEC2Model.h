@@ -68,6 +68,12 @@ typedef NS_ENUM(NSInteger, AWSEC2AllowsMultipleInstanceTypes) {
     AWSEC2AllowsMultipleInstanceTypesOff,
 };
 
+typedef NS_ENUM(NSInteger, AWSEC2ApplianceModeSupportValue) {
+    AWSEC2ApplianceModeSupportValueUnknown,
+    AWSEC2ApplianceModeSupportValueEnable,
+    AWSEC2ApplianceModeSupportValueDisable,
+};
+
 typedef NS_ENUM(NSInteger, AWSEC2ArchitectureType) {
     AWSEC2ArchitectureTypeUnknown,
     AWSEC2ArchitectureTypeI386,
@@ -635,6 +641,7 @@ typedef NS_ENUM(NSInteger, AWSEC2InstanceAttributeName) {
     AWSEC2InstanceAttributeNameEBSOptimized,
     AWSEC2InstanceAttributeNameSriovNetSupport,
     AWSEC2InstanceAttributeNameEnaSupport,
+    AWSEC2InstanceAttributeNameEnclaveOptions,
 };
 
 typedef NS_ENUM(NSInteger, AWSEC2InstanceHealthStatus) {
@@ -924,6 +931,7 @@ typedef NS_ENUM(NSInteger, AWSEC2InstanceType) {
     AWSEC2InstanceTypeP3_8xlarge,
     AWSEC2InstanceTypeP3_16xlarge,
     AWSEC2InstanceTypeP3Dn_24xlarge,
+    AWSEC2InstanceTypeP4D_24xlarge,
     AWSEC2InstanceTypeD2_xlarge,
     AWSEC2InstanceTypeD2_2xlarge,
     AWSEC2InstanceTypeD2_4xlarge,
@@ -1457,6 +1465,12 @@ typedef NS_ENUM(NSInteger, AWSEC2RuleAction) {
     AWSEC2RuleActionDeny,
 };
 
+typedef NS_ENUM(NSInteger, AWSEC2SelfServicePortal) {
+    AWSEC2SelfServicePortalUnknown,
+    AWSEC2SelfServicePortalEnabled,
+    AWSEC2SelfServicePortalDisabled,
+};
+
 typedef NS_ENUM(NSInteger, AWSEC2ServiceState) {
     AWSEC2ServiceStateUnknown,
     AWSEC2ServiceStatePending,
@@ -1939,6 +1953,8 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @class AWSEC2AssociateClientVpnTargetNetworkRequest;
 @class AWSEC2AssociateClientVpnTargetNetworkResult;
 @class AWSEC2AssociateDhcpOptionsRequest;
+@class AWSEC2AssociateEnclaveCertificateIamRoleRequest;
+@class AWSEC2AssociateEnclaveCertificateIamRoleResult;
 @class AWSEC2AssociateIamInstanceProfileRequest;
 @class AWSEC2AssociateIamInstanceProfileResult;
 @class AWSEC2AssociateRouteTableRequest;
@@ -1951,6 +1967,7 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @class AWSEC2AssociateTransitGatewayRouteTableResult;
 @class AWSEC2AssociateVpcCidrBlockRequest;
 @class AWSEC2AssociateVpcCidrBlockResult;
+@class AWSEC2AssociatedRole;
 @class AWSEC2AssociatedTargetNetwork;
 @class AWSEC2AssociationStatus;
 @class AWSEC2AttachClassicLinkVpcRequest;
@@ -2509,6 +2526,8 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @class AWSEC2DisassociateAddressRequest;
 @class AWSEC2DisassociateClientVpnTargetNetworkRequest;
 @class AWSEC2DisassociateClientVpnTargetNetworkResult;
+@class AWSEC2DisassociateEnclaveCertificateIamRoleRequest;
+@class AWSEC2DisassociateEnclaveCertificateIamRoleResult;
 @class AWSEC2DisassociateIamInstanceProfileRequest;
 @class AWSEC2DisassociateIamInstanceProfileResult;
 @class AWSEC2DisassociateRouteTableRequest;
@@ -2556,6 +2575,8 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @class AWSEC2EnableVpcClassicLinkDnsSupportResult;
 @class AWSEC2EnableVpcClassicLinkRequest;
 @class AWSEC2EnableVpcClassicLinkResult;
+@class AWSEC2EnclaveOptions;
+@class AWSEC2EnclaveOptionsRequest;
 @class AWSEC2EventInformation;
 @class AWSEC2ExportClientVpnClientCertificateRevocationListRequest;
 @class AWSEC2ExportClientVpnClientCertificateRevocationListResult;
@@ -2589,6 +2610,8 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @class AWSEC2FpgaImageAttribute;
 @class AWSEC2FpgaImageState;
 @class AWSEC2FpgaInfo;
+@class AWSEC2GetAssociatedEnclaveCertificateIamRolesRequest;
+@class AWSEC2GetAssociatedEnclaveCertificateIamRolesResult;
 @class AWSEC2GetAssociatedIpv6PoolCidrsRequest;
 @class AWSEC2GetAssociatedIpv6PoolCidrsResult;
 @class AWSEC2GetCapacityReservationUsageRequest;
@@ -2734,6 +2757,8 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @class AWSEC2LaunchTemplateEbsBlockDeviceRequest;
 @class AWSEC2LaunchTemplateElasticInferenceAccelerator;
 @class AWSEC2LaunchTemplateElasticInferenceAcceleratorResponse;
+@class AWSEC2LaunchTemplateEnclaveOptions;
+@class AWSEC2LaunchTemplateEnclaveOptionsRequest;
 @class AWSEC2LaunchTemplateHibernationOptions;
 @class AWSEC2LaunchTemplateHibernationOptionsRequest;
 @class AWSEC2LaunchTemplateIamInstanceProfileSpecification;
@@ -3958,6 +3983,52 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 /**
  
  */
+@interface AWSEC2AssociateEnclaveCertificateIamRoleRequest : AWSRequest
+
+
+/**
+ <p>The ARN of the ACM certificate with which to associate the IAM role.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable certificateArn;
+
+/**
+ <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable dryRun;
+
+/**
+ <p>The ARN of the IAM role to associate with the ACM certificate. You can associate up to 16 IAM roles with an ACM certificate.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable roleArn;
+
+@end
+
+/**
+ 
+ */
+@interface AWSEC2AssociateEnclaveCertificateIamRoleResult : AWSModel
+
+
+/**
+ <p>The name of the Amazon S3 bucket to which the certificate was uploaded.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable certificateS3BucketName;
+
+/**
+ <p>The Amazon S3 object key where the certificate, certificate chain, and encrypted private key bundle are stored. The object key is formatted as follows: <code>certificate_arn</code>/<code>role_arn</code>.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable certificateS3ObjectKey;
+
+/**
+ <p>The ID of the AWS Key Management Service (KMS) key used to encrypt the private key of the certificate.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable encryptionKmsKeyId;
+
+@end
+
+/**
+ 
+ */
 @interface AWSEC2AssociateIamInstanceProfileRequest : AWSRequest
 
 
@@ -4207,6 +4278,34 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @end
 
 /**
+ <p>Information about the associated IAM roles.</p>
+ */
+@interface AWSEC2AssociatedRole : AWSModel
+
+
+/**
+ <p>The ARN of the associated IAM role.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable associatedRoleArn;
+
+/**
+ <p>The name of the Amazon S3 bucket in which the Amazon S3 object is stored.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable certificateS3BucketName;
+
+/**
+ <p>The key of the Amazon S3 object ey where the certificate, certificate chain, and encrypted private key bundle is stored. The object key is formated as follows: <code>certificate_arn</code>/<code>role_arn</code>. </p>
+ */
+@property (nonatomic, strong) NSString * _Nullable certificateS3ObjectKey;
+
+/**
+ <p>The ID of the KMS key used to encrypt the private key.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable encryptionKmsKeyId;
+
+@end
+
+/**
  <p>Describes a target network that is associated with a Client VPN endpoint. A target network is a subnet in a VPC.</p>
  */
 @interface AWSEC2AssociatedTargetNetwork : AWSModel
@@ -4329,6 +4428,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSString * _Nullable instanceId;
 
 /**
+ <p>The index of the network card. Some instance types support multiple network cards. The primary network interface must be assigned to network card index 0. The default is network card index 0.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable networkCardIndex;
+
+/**
  <p>The ID of the network interface.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable networkInterfaceId;
@@ -4345,6 +4449,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>The ID of the network interface attachment.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable attachmentId;
+
+/**
+ <p>The index of the network card.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable networkCardIndex;
 
 @end
 
@@ -5657,7 +5766,7 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @end
 
 /**
- <p>Describes the authentication methods used by a Client VPN endpoint. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/authentication-authrization.html#client-authentication">Authentication</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
+ <p>Describes the authentication methods used by a Client VPN endpoint. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/client-authentication.html">Authentication</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
  */
 @interface AWSEC2ClientVpnAuthentication : AWSModel
 
@@ -5881,6 +5990,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>The IDs of the security groups for the target network.</p>
  */
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable securityGroupIds;
+
+/**
+ <p>The URL of the self-service portal.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable selfServicePortalUrl;
 
 /**
  <p>The ARN of the server certificate.</p>
@@ -6634,6 +6748,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>The IDs of one or more security groups to apply to the target network. You must also specify the ID of the VPC that contains the security groups.</p>
  */
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable securityGroupIds;
+
+/**
+ <p>Specify whether to enable the self-service portal for the Client VPN endpoint.</p><p>Default Value: <code>enabled</code></p>
+ */
+@property (nonatomic, assign) AWSEC2SelfServicePortal selfServicePortal;
 
 /**
  <p>The ARN of the server certificate. For more information, see the <a href="https://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p>
@@ -8945,6 +9064,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  */
 @interface AWSEC2CreateTransitGatewayVpcAttachmentRequestOptions : AWSModel
 
+
+/**
+ <p>Enable or disable support for appliance mode. If enabled, a traffic flow between a source and destination uses the same Availability Zone for the VPC attachment for the lifetime of that flow. The default is <code>disable</code>.</p>
+ */
+@property (nonatomic, assign) AWSEC2ApplianceModeSupportValue applianceModeSupport;
 
 /**
  <p>Enable or disable DNS support. The default is <code>enable</code>.</p>
@@ -17553,6 +17677,42 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 /**
  
  */
+@interface AWSEC2DisassociateEnclaveCertificateIamRoleRequest : AWSRequest
+
+
+/**
+ <p>The ARN of the ACM certificate from which to disassociate the IAM role.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable certificateArn;
+
+/**
+ <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable dryRun;
+
+/**
+ <p>The ARN of the IAM role to disassociate.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable roleArn;
+
+@end
+
+/**
+ 
+ */
+@interface AWSEC2DisassociateEnclaveCertificateIamRoleResult : AWSModel
+
+
+/**
+ <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable returned;
+
+@end
+
+/**
+ 
+ */
 @interface AWSEC2DisassociateIamInstanceProfileRequest : AWSRequest
 
 
@@ -18546,6 +18706,32 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @end
 
 /**
+ <p>Indicates whether the instance is enabled for AWS Nitro Enclaves.</p>
+ */
+@interface AWSEC2EnclaveOptions : AWSModel
+
+
+/**
+ <p>If this parameter is set to <code>true</code>, the instance is enabled for AWS Nitro Enclaves; otherwise, it is not enabled for AWS Nitro Enclaves.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable enabled;
+
+@end
+
+/**
+ <p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitro-enclave.html"> AWS Nitro Enclaves</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+ */
+@interface AWSEC2EnclaveOptionsRequest : AWSModel
+
+
+/**
+ <p>To enable the instance for AWS Nitro Enclaves, set this parameter to <code>true</code>.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable enabled;
+
+@end
+
+/**
  <p>Describes an EC2 Fleet or Spot Fleet event.</p>
  */
 @interface AWSEC2EventInformation : AWSModel
@@ -18985,7 +19171,7 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @end
 
 /**
- <p>Describes the IAM SAML identity provider used for federated authentication.</p>
+ <p>Describes the IAM SAML identity providers used for federated authentication.</p>
  */
 @interface AWSEC2FederatedAuthentication : AWSModel
 
@@ -18994,6 +19180,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>The Amazon Resource Name (ARN) of the IAM SAML identity provider.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable samlProviderArn;
+
+/**
+ <p>The Amazon Resource Name (ARN) of the IAM SAML identity provider for the self-service portal.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable selfServiceSamlProviderArn;
 
 @end
 
@@ -19007,6 +19198,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>The Amazon Resource Name (ARN) of the IAM SAML identity provider.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable SAMLProviderArn;
+
+/**
+ <p>The Amazon Resource Name (ARN) of the IAM SAML identity provider for the self-service portal.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable selfServiceSAMLProviderArn;
 
 @end
 
@@ -19572,6 +19768,37 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>The total memory of all FPGA accelerators for the instance type.</p>
  */
 @property (nonatomic, strong) NSNumber * _Nullable totalFpgaMemoryInMiB;
+
+@end
+
+/**
+ 
+ */
+@interface AWSEC2GetAssociatedEnclaveCertificateIamRolesRequest : AWSRequest
+
+
+/**
+ <p>The ARN of the ACM certificate for which to view the associated IAM roles, encryption keys, and Amazon S3 object information.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable certificateArn;
+
+/**
+ <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable dryRun;
+
+@end
+
+/**
+ 
+ */
+@interface AWSEC2GetAssociatedEnclaveCertificateIamRolesResult : AWSModel
+
+
+/**
+ <p>Information about the associated IAM roles.</p>
+ */
+@property (nonatomic, strong) NSArray<AWSEC2AssociatedRole *> * _Nullable associatedRoles;
 
 @end
 
@@ -22118,6 +22345,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSNumber * _Nullable enaSupport;
 
 /**
+ <p>Indicates whether the instance is enabled for AWS Nitro Enclaves.</p>
+ */
+@property (nonatomic, strong) AWSEC2EnclaveOptions * _Nullable enclaveOptions;
+
+/**
  <p>Indicates whether the instance is enabled for hibernation.</p>
  */
 @property (nonatomic, strong) AWSEC2HibernationOptions * _Nullable hibernationOptions;
@@ -22324,6 +22556,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>Indicates whether enhanced networking with ENA is enabled.</p>
  */
 @property (nonatomic, strong) AWSEC2AttributeBooleanValue * _Nullable enaSupport;
+
+/**
+ <p>To enable the instance for AWS Nitro Enclaves, set this parameter to <code>true</code>; otherwise, set it to <code>false</code>.</p>
+ */
+@property (nonatomic, strong) AWSEC2EnclaveOptions * _Nullable enclaveOptions;
 
 /**
  <p>The security groups associated with the instance.</p>
@@ -22797,6 +23034,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSNumber * _Nullable deviceIndex;
 
 /**
+ <p>The index of the network card.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable networkCardIndex;
+
+/**
  <p>The attachment state.</p>
  */
 @property (nonatomic, assign) AWSEC2AttachmentStatus status;
@@ -22840,7 +23082,7 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable groups;
 
 /**
- <p>The type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html">Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p><p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p><p>Valid values: <code>interface</code> | <code>efa</code></p>
+ <p>The type of network interface.</p><p>To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html">Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p><p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p><p>Valid values: <code>interface</code> | <code>efa</code></p>
  */
 @property (nonatomic, strong) NSString * _Nullable interfaceType;
 
@@ -22853,6 +23095,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>One or more IPv6 addresses to assign to the network interface. You cannot specify this option and the option to assign a number of IPv6 addresses in the same request. You cannot specify this option if you've specified a minimum number of instances to launch.</p>
  */
 @property (nonatomic, strong) NSArray<AWSEC2InstanceIpv6Address *> * _Nullable ipv6Addresses;
+
+/**
+ <p>The index of the network card. Some instance types support multiple network cards. The primary network interface must be assigned to network card index 0. The default is network card index 0.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable networkCardIndex;
 
 /**
  <p>The ID of the network interface.</p><p>If you are creating a Spot Fleet, omit this parameter because you can’t specify a network interface ID in a launch specification.</p>
@@ -24008,6 +24255,32 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @end
 
 /**
+ <p>Indicates whether the instance is enabled for AWS Nitro Enclaves.</p>
+ */
+@interface AWSEC2LaunchTemplateEnclaveOptions : AWSModel
+
+
+/**
+ <p>If this parameter is set to <code>true</code>, the instance is enabled for AWS Nitro Enclaves; otherwise, it is not enabled for AWS Nitro Enclaves.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable enabled;
+
+@end
+
+/**
+ <p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For more information, see <a href="https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html"> What is AWS Nitro Enclaves?</a> in the <i>AWS Nitro Enclaves User Guide</i>.</p>
+ */
+@interface AWSEC2LaunchTemplateEnclaveOptionsRequest : AWSModel
+
+
+/**
+ <p>To enable the instance for AWS Nitro Enclaves, set this parameter to <code>true</code>.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable enabled;
+
+@end
+
+/**
  <p>Indicates whether an instance is configured for hibernation.</p>
  */
 @interface AWSEC2LaunchTemplateHibernationOptions : AWSModel
@@ -24208,6 +24481,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSArray<AWSEC2InstanceIpv6Address *> * _Nullable ipv6Addresses;
 
 /**
+ <p>The index of the network card.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable networkCardIndex;
+
+/**
  <p>The ID of the network interface.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable networkInterfaceId;
@@ -24284,6 +24562,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet. You can't use this option if you're specifying a number of IPv6 addresses.</p>
  */
 @property (nonatomic, strong) NSArray<AWSEC2InstanceIpv6AddressRequest *> * _Nullable ipv6Addresses;
+
+/**
+ <p>The index of the network card. Some instance types support multiple network cards. The primary network interface must be assigned to network card index 0. The default is network card index 0.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable networkCardIndex;
 
 /**
  <p>The ID of the network interface.</p>
@@ -25258,6 +25541,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>The IDs of one or more security groups to apply to the target network.</p>
  */
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable securityGroupIds;
+
+/**
+ <p>Specify whether to enable the self-service portal for the Client VPN endpoint.</p>
+ */
+@property (nonatomic, assign) AWSEC2SelfServicePortal selfServicePortal;
 
 /**
  <p>The ARN of the server certificate to be used. The server certificate must be provisioned in AWS Certificate Manager (ACM).</p>
@@ -26596,6 +26884,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 
 
 /**
+ <p>Enable or disable support for appliance mode. If enabled, a traffic flow between a source and destination uses the same Availability Zone for the VPC attachment for the lifetime of that flow. The default is <code>disable</code>.</p>
+ */
+@property (nonatomic, assign) AWSEC2ApplianceModeSupportValue applianceModeSupport;
+
+/**
  <p>Enable or disable DNS support. The default is <code>enable</code>.</p>
  */
 @property (nonatomic, assign) AWSEC2DnsSupportValue dnsSupport;
@@ -27777,7 +28070,7 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSString * _Nullable publicDnsName;
 
 /**
- <p>The address of the Elastic IP address or Carrier IP address bound to the network interface.</p>
+ <p>The address of the Elastic IP address bound to the network interface.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable publicIp;
 
@@ -27818,6 +28111,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  <p>The AWS account ID of the owner of the instance.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable instanceOwnerId;
+
+/**
+ <p>The index of the network card.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable networkCardIndex;
 
 /**
  <p>The attachment state.</p>
@@ -29949,6 +30247,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSArray<AWSEC2LaunchTemplateElasticInferenceAccelerator *> * _Nullable elasticInferenceAccelerators;
 
 /**
+ <p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For more information, see <a href="https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html"> What is AWS Nitro Enclaves?</a> in the <i>AWS Nitro Enclaves User Guide</i>.</p><p>You can't enable AWS Nitro Enclaves and hibernation on the same instance.</p>
+ */
+@property (nonatomic, strong) AWSEC2LaunchTemplateEnclaveOptionsRequest * _Nullable enclaveOptions;
+
+/**
  <p>Indicates whether an instance is enabled for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
  */
 @property (nonatomic, strong) AWSEC2LaunchTemplateHibernationOptionsRequest * _Nullable hibernationOptions;
@@ -30915,6 +31218,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSArray<AWSEC2LaunchTemplateElasticInferenceAcceleratorResponse *> * _Nullable elasticInferenceAccelerators;
 
 /**
+ <p>Indicates whether the instance is enabled for AWS Nitro Enclaves.</p>
+ */
+@property (nonatomic, strong) AWSEC2LaunchTemplateEnclaveOptions * _Nullable enclaveOptions;
+
+/**
  <p>Indicates whether an instance is configured for hibernation. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
  */
 @property (nonatomic, strong) AWSEC2LaunchTemplateHibernationOptions * _Nullable hibernationOptions;
@@ -31534,7 +31842,12 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
 @property (nonatomic, strong) NSArray<AWSEC2ElasticInferenceAccelerator *> * _Nullable elasticInferenceAccelerators;
 
 /**
- <p>Indicates whether an instance is enabled for hibernation. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate your instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+ <p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitro-enclave.html"> AWS Nitro Enclaves</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p><p>You can't enable AWS Nitro Enclaves and hibernation on the same instance. For more information about AWS Nitro Enclaves requirements, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitro-enclave.html#nitro-enclave-reqs"> AWS Nitro Enclaves</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+ */
+@property (nonatomic, strong) AWSEC2EnclaveOptionsRequest * _Nullable enclaveOptions;
+
+/**
+ <p>Indicates whether an instance is enabled for hibernation. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate your instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p><p>You can't enable hibernation and AWS Nitro Enclaves on the same instance.</p>
  */
 @property (nonatomic, strong) AWSEC2HibernationOptionsRequest * _Nullable hibernationOptions;
 
@@ -35483,6 +35796,11 @@ typedef NS_ENUM(NSInteger, AWSEC2scope) {
  */
 @interface AWSEC2TransitGatewayVpcAttachmentOptions : AWSModel
 
+
+/**
+ <p>Indicates whether appliance mode support is enabled.</p>
+ */
+@property (nonatomic, assign) AWSEC2ApplianceModeSupportValue applianceModeSupport;
 
 /**
  <p>Indicates whether DNS support is enabled.</p>
