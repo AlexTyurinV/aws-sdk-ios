@@ -2832,6 +2832,41 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 @end
 
+@implementation AWSEC2ClientConnectOptions
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"enabled" : @"Enabled",
+             @"lambdaFunctionArn" : @"LambdaFunctionArn",
+             };
+}
+
+@end
+
+@implementation AWSEC2ClientConnectResponseOptions
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"enabled" : @"Enabled",
+             @"lambdaFunctionArn" : @"LambdaFunctionArn",
+             @"status" : @"Status",
+             };
+}
+
++ (NSValueTransformer *)statusJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2ClientVpnEndpointAttributeStatus class]];
+}
+
+@end
+
 @implementation AWSEC2ClientData
 
 + (BOOL)supportsSecureCoding {
@@ -3039,6 +3074,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"egressPackets" : @"EgressPackets",
              @"ingressBytes" : @"IngressBytes",
              @"ingressPackets" : @"IngressPackets",
+             @"postureComplianceStatuses" : @"PostureComplianceStatuses",
              @"status" : @"Status",
              @"timestamp" : @"Timestamp",
              @"username" : @"Username",
@@ -3108,6 +3144,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"associatedTargetNetworks" : @"AssociatedTargetNetworks",
              @"authenticationOptions" : @"AuthenticationOptions",
              @"clientCidrBlock" : @"ClientCidrBlock",
+             @"clientConnectOptions" : @"ClientConnectOptions",
              @"clientVpnEndpointId" : @"ClientVpnEndpointId",
              @"connectionLogOptions" : @"ConnectionLogOptions",
              @"creationTime" : @"CreationTime",
@@ -3134,6 +3171,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 + (NSValueTransformer *)authenticationOptionsJSONTransformer {
     return [NSValueTransformer awsmtl_JSONArrayTransformerWithModelClass:[AWSEC2ClientVpnAuthentication class]];
+}
+
++ (NSValueTransformer *)clientConnectOptionsJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2ClientConnectResponseOptions class]];
 }
 
 + (NSValueTransformer *)connectionLogOptionsJSONTransformer {
@@ -3179,6 +3220,42 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
         switch ([value integerValue]) {
             case AWSEC2VpnProtocolOpenvpn:
                 return @"openvpn";
+            default:
+                return nil;
+        }
+    }];
+}
+
+@end
+
+@implementation AWSEC2ClientVpnEndpointAttributeStatus
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"code" : @"Code",
+             @"message" : @"Message",
+             };
+}
+
++ (NSValueTransformer *)codeJSONTransformer {
+    return [AWSMTLValueTransformer reversibleTransformerWithForwardBlock:^NSNumber *(NSString *value) {
+        if ([value caseInsensitiveCompare:@"applying"] == NSOrderedSame) {
+            return @(AWSEC2ClientVpnEndpointAttributeStatusCodeApplying);
+        }
+        if ([value caseInsensitiveCompare:@"applied"] == NSOrderedSame) {
+            return @(AWSEC2ClientVpnEndpointAttributeStatusCodeApplied);
+        }
+        return @(AWSEC2ClientVpnEndpointAttributeStatusCodeUnknown);
+    } reverseBlock:^NSString *(NSNumber *value) {
+        switch ([value integerValue]) {
+            case AWSEC2ClientVpnEndpointAttributeStatusCodeApplying:
+                return @"applying";
+            case AWSEC2ClientVpnEndpointAttributeStatusCodeApplied:
+                return @"applied";
             default:
                 return nil;
         }
@@ -3903,6 +3980,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 	return @{
              @"authenticationOptions" : @"AuthenticationOptions",
              @"clientCidrBlock" : @"ClientCidrBlock",
+             @"clientConnectOptions" : @"ClientConnectOptions",
              @"clientToken" : @"ClientToken",
              @"connectionLogOptions" : @"ConnectionLogOptions",
              @"detail" : @"Description",
@@ -3921,6 +3999,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 + (NSValueTransformer *)authenticationOptionsJSONTransformer {
     return [NSValueTransformer awsmtl_JSONArrayTransformerWithModelClass:[AWSEC2ClientVpnAuthenticationRequest class]];
+}
+
++ (NSValueTransformer *)clientConnectOptionsJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2ClientConnectOptions class]];
 }
 
 + (NSValueTransformer *)connectionLogOptionsJSONTransformer {
@@ -7166,6 +7248,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"networkInterfaceId" : @"NetworkInterfaceId",
              @"routeTableId" : @"RouteTableId",
              @"transitGatewayId" : @"TransitGatewayId",
+             @"vpcEndpointId" : @"VpcEndpointId",
              @"vpcPeeringConnectionId" : @"VpcPeeringConnectionId",
              };
 }
@@ -8216,6 +8299,9 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
         if ([value caseInsensitiveCompare:@"Gateway"] == NSOrderedSame) {
             return @(AWSEC2VpcEndpointTypeGateway);
         }
+        if ([value caseInsensitiveCompare:@"GatewayLoadBalancer"] == NSOrderedSame) {
+            return @(AWSEC2VpcEndpointTypeGatewayLoadBalancer);
+        }
         return @(AWSEC2VpcEndpointTypeUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -8223,6 +8309,8 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return @"Interface";
             case AWSEC2VpcEndpointTypeGateway:
                 return @"Gateway";
+            case AWSEC2VpcEndpointTypeGatewayLoadBalancer:
+                return @"GatewayLoadBalancer";
             default:
                 return nil;
         }
@@ -8261,6 +8349,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"acceptanceRequired" : @"AcceptanceRequired",
              @"clientToken" : @"ClientToken",
              @"dryRun" : @"DryRun",
+             @"gatewayLoadBalancerArns" : @"GatewayLoadBalancerArns",
              @"networkLoadBalancerArns" : @"NetworkLoadBalancerArns",
              @"privateDnsName" : @"PrivateDnsName",
              @"tagSpecifications" : @"TagSpecifications",
@@ -25299,6 +25388,102 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"launchTemplateName" : @"LaunchTemplateName",
              @"version" : @"Version",
              };
+}
+
+@end
+
+@implementation AWSEC2FleetSpotCapacityRebalance
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"replacementStrategy" : @"ReplacementStrategy",
+             };
+}
+
++ (NSValueTransformer *)replacementStrategyJSONTransformer {
+    return [AWSMTLValueTransformer reversibleTransformerWithForwardBlock:^NSNumber *(NSString *value) {
+        if ([value caseInsensitiveCompare:@"launch"] == NSOrderedSame) {
+            return @(AWSEC2FleetReplacementStrategyLaunch);
+        }
+        return @(AWSEC2FleetReplacementStrategyUnknown);
+    } reverseBlock:^NSString *(NSNumber *value) {
+        switch ([value integerValue]) {
+            case AWSEC2FleetReplacementStrategyLaunch:
+                return @"launch";
+            default:
+                return nil;
+        }
+    }];
+}
+
+@end
+
+@implementation AWSEC2FleetSpotCapacityRebalanceRequest
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"replacementStrategy" : @"ReplacementStrategy",
+             };
+}
+
++ (NSValueTransformer *)replacementStrategyJSONTransformer {
+    return [AWSMTLValueTransformer reversibleTransformerWithForwardBlock:^NSNumber *(NSString *value) {
+        if ([value caseInsensitiveCompare:@"launch"] == NSOrderedSame) {
+            return @(AWSEC2FleetReplacementStrategyLaunch);
+        }
+        return @(AWSEC2FleetReplacementStrategyUnknown);
+    } reverseBlock:^NSString *(NSNumber *value) {
+        switch ([value integerValue]) {
+            case AWSEC2FleetReplacementStrategyLaunch:
+                return @"launch";
+            default:
+                return nil;
+        }
+    }];
+}
+
+@end
+
+@implementation AWSEC2FleetSpotMaintenanceStrategies
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"capacityRebalance" : @"CapacityRebalance",
+             };
+}
+
++ (NSValueTransformer *)capacityRebalanceJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2FleetSpotCapacityRebalance class]];
+}
+
+@end
+
+@implementation AWSEC2FleetSpotMaintenanceStrategiesRequest
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"capacityRebalance" : @"CapacityRebalance",
+             };
+}
+
++ (NSValueTransformer *)capacityRebalanceJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2FleetSpotCapacityRebalanceRequest class]];
 }
 
 @end
@@ -42812,6 +42997,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
+             @"clientConnectOptions" : @"ClientConnectOptions",
              @"clientVpnEndpointId" : @"ClientVpnEndpointId",
              @"connectionLogOptions" : @"ConnectionLogOptions",
              @"detail" : @"Description",
@@ -42824,6 +43010,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"vpcId" : @"VpcId",
              @"vpnPort" : @"VpnPort",
              };
+}
+
++ (NSValueTransformer *)clientConnectOptionsJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2ClientConnectOptions class]];
 }
 
 + (NSValueTransformer *)connectionLogOptionsJSONTransformer {
@@ -44704,9 +44894,11 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
              @"acceptanceRequired" : @"AcceptanceRequired",
+             @"addGatewayLoadBalancerArns" : @"AddGatewayLoadBalancerArns",
              @"addNetworkLoadBalancerArns" : @"AddNetworkLoadBalancerArns",
              @"dryRun" : @"DryRun",
              @"privateDnsName" : @"PrivateDnsName",
+             @"removeGatewayLoadBalancerArns" : @"RemoveGatewayLoadBalancerArns",
              @"removeNetworkLoadBalancerArns" : @"RemoveNetworkLoadBalancerArns",
              @"removePrivateDnsName" : @"RemovePrivateDnsName",
              @"serviceId" : @"ServiceId",
@@ -45432,6 +45624,22 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 @end
 
+@implementation AWSEC2NetworkCardInfo
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"maximumNetworkInterfaces" : @"MaximumNetworkInterfaces",
+             @"networkCardIndex" : @"NetworkCardIndex",
+             @"networkPerformance" : @"NetworkPerformance",
+             };
+}
+
+@end
+
 @implementation AWSEC2NetworkInfo
 
 + (BOOL)supportsSecureCoding {
@@ -45440,12 +45648,15 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
+             @"defaultNetworkCardIndex" : @"DefaultNetworkCardIndex",
              @"efaSupported" : @"EfaSupported",
              @"enaSupport" : @"EnaSupport",
              @"ipv4AddressesPerInterface" : @"Ipv4AddressesPerInterface",
              @"ipv6AddressesPerInterface" : @"Ipv6AddressesPerInterface",
              @"ipv6Supported" : @"Ipv6Supported",
+             @"maximumNetworkCards" : @"MaximumNetworkCards",
              @"maximumNetworkInterfaces" : @"MaximumNetworkInterfaces",
+             @"networkCards" : @"NetworkCards",
              @"networkPerformance" : @"NetworkPerformance",
              };
 }
@@ -45474,6 +45685,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return nil;
         }
     }];
+}
+
++ (NSValueTransformer *)networkCardsJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONArrayTransformerWithModelClass:[AWSEC2NetworkCardInfo class]];
 }
 
 @end
@@ -47585,6 +47800,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"networkInterfaceId" : @"NetworkInterfaceId",
              @"routeTableId" : @"RouteTableId",
              @"transitGatewayId" : @"TransitGatewayId",
+             @"vpcEndpointId" : @"VpcEndpointId",
              @"vpcPeeringConnectionId" : @"VpcPeeringConnectionId",
              };
 }
@@ -62719,6 +62935,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"acceptanceRequired" : @"AcceptanceRequired",
              @"availabilityZones" : @"AvailabilityZones",
              @"baseEndpointDnsNames" : @"BaseEndpointDnsNames",
+             @"gatewayLoadBalancerArns" : @"GatewayLoadBalancerArns",
              @"managesVpcEndpoints" : @"ManagesVpcEndpoints",
              @"networkLoadBalancerArns" : @"NetworkLoadBalancerArns",
              @"privateDnsName" : @"PrivateDnsName",
@@ -62860,6 +63077,9 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
         if ([value caseInsensitiveCompare:@"Gateway"] == NSOrderedSame) {
             return @(AWSEC2ServiceTypeGateway);
         }
+        if ([value caseInsensitiveCompare:@"GatewayLoadBalancer"] == NSOrderedSame) {
+            return @(AWSEC2ServiceTypeGatewayLoadBalancer);
+        }
         return @(AWSEC2ServiceTypeUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -62867,6 +63087,8 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return @"Interface";
             case AWSEC2ServiceTypeGateway:
                 return @"Gateway";
+            case AWSEC2ServiceTypeGatewayLoadBalancer:
+                return @"GatewayLoadBalancer";
             default:
                 return nil;
         }
@@ -63135,6 +63357,36 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 + (NSValueTransformer *)userBucketJSONTransformer {
     return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2UserBucketDetails class]];
+}
+
+@end
+
+@implementation AWSEC2SpotCapacityRebalance
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"replacementStrategy" : @"ReplacementStrategy",
+             };
+}
+
++ (NSValueTransformer *)replacementStrategyJSONTransformer {
+    return [AWSMTLValueTransformer reversibleTransformerWithForwardBlock:^NSNumber *(NSString *value) {
+        if ([value caseInsensitiveCompare:@"launch"] == NSOrderedSame) {
+            return @(AWSEC2ReplacementStrategyLaunch);
+        }
+        return @(AWSEC2ReplacementStrategyUnknown);
+    } reverseBlock:^NSString *(NSNumber *value) {
+        switch ([value integerValue]) {
+            case AWSEC2ReplacementStrategyLaunch:
+                return @"launch";
+            default:
+                return nil;
+        }
+    }];
 }
 
 @end
@@ -65151,6 +65403,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"onDemandMaxTotalPrice" : @"OnDemandMaxTotalPrice",
              @"onDemandTargetCapacity" : @"OnDemandTargetCapacity",
              @"replaceUnhealthyInstances" : @"ReplaceUnhealthyInstances",
+             @"spotMaintenanceStrategies" : @"SpotMaintenanceStrategies",
              @"spotMaxTotalPrice" : @"SpotMaxTotalPrice",
              @"spotPrice" : @"SpotPrice",
              @"tagSpecifications" : @"TagSpecifications",
@@ -65266,6 +65519,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return nil;
         }
     }];
+}
+
++ (NSValueTransformer *)spotMaintenanceStrategiesJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2SpotMaintenanceStrategies class]];
 }
 
 + (NSValueTransformer *)tagSpecificationsJSONTransformer {
@@ -65791,6 +66048,24 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 
 @end
 
+@implementation AWSEC2SpotMaintenanceStrategies
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+	return @{
+             @"capacityRebalance" : @"CapacityRebalance",
+             };
+}
+
++ (NSValueTransformer *)capacityRebalanceJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2SpotCapacityRebalance class]];
+}
+
+@end
+
 @implementation AWSEC2SpotMarketOptions
 
 + (BOOL)supportsSecureCoding {
@@ -65875,6 +66150,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"allocationStrategy" : @"AllocationStrategy",
              @"instanceInterruptionBehavior" : @"InstanceInterruptionBehavior",
              @"instancePoolsToUseCount" : @"InstancePoolsToUseCount",
+             @"maintenanceStrategies" : @"MaintenanceStrategies",
              @"maxTotalPrice" : @"MaxTotalPrice",
              @"minTargetCapacity" : @"MinTargetCapacity",
              @"singleAvailabilityZone" : @"SingleAvailabilityZone",
@@ -65932,6 +66208,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return nil;
         }
     }];
+}
+
++ (NSValueTransformer *)maintenanceStrategiesJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2FleetSpotMaintenanceStrategies class]];
 }
 
 @end
@@ -65947,6 +66227,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
              @"allocationStrategy" : @"AllocationStrategy",
              @"instanceInterruptionBehavior" : @"InstanceInterruptionBehavior",
              @"instancePoolsToUseCount" : @"InstancePoolsToUseCount",
+             @"maintenanceStrategies" : @"MaintenanceStrategies",
              @"maxTotalPrice" : @"MaxTotalPrice",
              @"minTargetCapacity" : @"MinTargetCapacity",
              @"singleAvailabilityZone" : @"SingleAvailabilityZone",
@@ -66004,6 +66285,10 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return nil;
         }
     }];
+}
+
++ (NSValueTransformer *)maintenanceStrategiesJSONTransformer {
+    return [NSValueTransformer awsmtl_JSONDictionaryTransformerWithModelClass:[AWSEC2FleetSpotMaintenanceStrategiesRequest class]];
 }
 
 @end
@@ -72519,6 +72804,9 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
         if ([value caseInsensitiveCompare:@"Gateway"] == NSOrderedSame) {
             return @(AWSEC2VpcEndpointTypeGateway);
         }
+        if ([value caseInsensitiveCompare:@"GatewayLoadBalancer"] == NSOrderedSame) {
+            return @(AWSEC2VpcEndpointTypeGatewayLoadBalancer);
+        }
         return @(AWSEC2VpcEndpointTypeUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -72526,6 +72814,8 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
                 return @"Interface";
             case AWSEC2VpcEndpointTypeGateway:
                 return @"Gateway";
+            case AWSEC2VpcEndpointTypeGatewayLoadBalancer:
+                return @"GatewayLoadBalancer";
             default:
                 return nil;
         }
@@ -72544,6 +72834,7 @@ return [date aws_stringValue:AWSDateISO8601DateFormat1];
 	return @{
              @"creationTimestamp" : @"CreationTimestamp",
              @"dnsEntries" : @"DnsEntries",
+             @"gatewayLoadBalancerArns" : @"GatewayLoadBalancerArns",
              @"networkLoadBalancerArns" : @"NetworkLoadBalancerArns",
              @"serviceId" : @"ServiceId",
              @"vpcEndpointId" : @"VpcEndpointId",

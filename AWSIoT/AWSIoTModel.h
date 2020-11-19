@@ -6525,6 +6525,11 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
+ <p>Whether to deliver the Kinesis Data Firehose stream as a batch by using <a href="https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html"><code>PutRecordBatch</code></a>. The default value is <code>false</code>.</p><p>When <code>batchMode</code> is <code>true</code> and the rule's SQL statement evaluates to an Array, each Array element forms one record in the <a href="https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html"><code>PutRecordBatch</code></a> request. The resulting array can't have more than 500 records.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable batchMode;
+
+/**
  <p>The delivery stream name.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable deliveryStreamName;
@@ -7200,6 +7205,11 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
+ <p>Whether to process the action as a batch. The default value is <code>false</code>.</p><p>When <code>batchMode</code> is <code>true</code> and the rule SQL statement evaluates to an Array, each Array element is delivered as a separate message when passed by <a href="https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_BatchPutMessage.html"><code>BatchPutMessage</code></a> to the AWS IoT Analytics channel. The resulting array can't have more than 100 messages.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable batchMode;
+
+/**
  <p>(deprecated) The ARN of the IoT Analytics channel to which message data will be sent.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable channelArn;
@@ -7224,12 +7234,17 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
+ <p>Whether to process the event actions as a batch. The default value is <code>false</code>.</p><p>When <code>batchMode</code> is <code>true</code>, you can't specify a <code>messageId</code>. </p><p>When <code>batchMode</code> is <code>true</code> and the rule SQL statement evaluates to an Array, each Array element is treated as a separate message when it's sent to AWS IoT Events by calling <a href="https://docs.aws.amazon.com/iotevents/latest/apireference/API_iotevents-data_BatchPutMessage.html"><code>BatchPutMessage</code></a>. The resulting array can't have more than 10 messages.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable batchMode;
+
+/**
  <p>The name of the AWS IoT Events input.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable inputName;
 
 /**
- <p>[Optional] Use this to ensure that only one input (message) with a given messageId will be processed by an AWS IoT Events detector.</p>
+ <p>The ID of the message. The default <code>messageId</code> is a new UUID value.</p><p>When <code>batchMode</code> is <code>true</code>, you can't specify a <code>messageId</code>--a new UUID value will be assigned.</p><p>Assign a value to this property to ensure that only one input (message) with a given <code>messageId</code> will be processed by an AWS IoT Events detector.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable messageId;
 
@@ -8117,7 +8132,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSString * _Nullable namePrefixFilter;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -8135,7 +8150,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSArray<AWSIoTGroupNameAndArn *> * _Nullable billingGroups;
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -8839,7 +8854,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -8857,7 +8872,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9157,7 +9172,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9175,7 +9190,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9280,7 +9295,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9298,7 +9313,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9326,7 +9341,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSString * _Nullable namePrefixFilter;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9349,7 +9364,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results. Will not be returned if operation has returned all results.</p>
+ <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9368,6 +9383,16 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
+ <p>The maximum number of results to return in this operation.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable maxResults;
+
+/**
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable nextToken;
+
+/**
  <p>The name of the thing.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable thingName;
@@ -9379,6 +9404,11 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
  */
 @interface AWSIoTListThingPrincipalsResponse : AWSModel
 
+
+/**
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable nextToken;
 
 /**
  <p>The principals associated with the thing.</p>
@@ -9399,7 +9429,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9422,7 +9452,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9450,7 +9480,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9468,7 +9498,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9491,7 +9521,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9537,7 +9567,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9550,7 +9580,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results. Will not be returned if operation has returned all results.</p>
+ <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9573,7 +9603,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9596,7 +9626,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9629,7 +9659,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9647,7 +9677,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>The token used to get the next set of results. Will not be returned if operation has returned all results.</p>
+ <p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9670,7 +9700,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9688,7 +9718,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSArray<AWSIoTTopicRuleDestinationSummary *> * _Nullable destinationSummaries;
 
 /**
- <p>The token to retrieve the next set of results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9706,7 +9736,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>A token used to retrieve the next value.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9729,7 +9759,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 
 
 /**
- <p>A token used to retrieve the next value.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9752,7 +9782,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSNumber * _Nullable maxResults;
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -9775,7 +9805,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, strong) NSArray<AWSIoTLogTargetConfiguration *> * _Nullable logTargetConfigurations;
 
 /**
- <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+ <p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable nextToken;
 
@@ -11000,7 +11030,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @property (nonatomic, assign) AWSIoTCannedAccessControlList cannedAcl;
 
 /**
- <p>The object key.</p>
+ <p>The object key. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/list_amazons3.html">Actions, resources, and condition keys for Amazon S3</a>.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable key;
 
@@ -11340,7 +11370,7 @@ typedef NS_ENUM(NSInteger, AWSIoTViolationEventType) {
 @end
 
 /**
- <p>Use Sig V4 authorization.</p>
+ <p>For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 signing process</a>.</p>
  Required parameters: [signingRegion, serviceName, roleArn]
  */
 @interface AWSIoTSigV4Authorization : AWSModel

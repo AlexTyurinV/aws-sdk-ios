@@ -2699,7 +2699,8 @@
       \"errors\":[\
         {\"shape\":\"InvalidRequestException\"},\
         {\"shape\":\"InternalFailureException\"},\
-        {\"shape\":\"ResourceNotFoundException\"}\
+        {\"shape\":\"ResourceNotFoundException\"},\
+        {\"shape\":\"ThrottlingException\"}\
       ],\
       \"documentation\":\"<p>List the thing groups in your account.</p>\"\
     },\
@@ -2714,7 +2715,8 @@
       \"errors\":[\
         {\"shape\":\"InvalidRequestException\"},\
         {\"shape\":\"InternalFailureException\"},\
-        {\"shape\":\"ResourceNotFoundException\"}\
+        {\"shape\":\"ResourceNotFoundException\"},\
+        {\"shape\":\"ThrottlingException\"}\
       ],\
       \"documentation\":\"<p>List the thing groups to which the specified thing belongs.</p>\"\
     },\
@@ -2829,7 +2831,8 @@
       \"errors\":[\
         {\"shape\":\"InvalidRequestException\"},\
         {\"shape\":\"InternalFailureException\"},\
-        {\"shape\":\"ResourceNotFoundException\"}\
+        {\"shape\":\"ResourceNotFoundException\"},\
+        {\"shape\":\"ThrottlingException\"}\
       ],\
       \"documentation\":\"<p>Lists the things in the specified group.</p>\"\
     },\
@@ -4988,6 +4991,7 @@
       \"documentation\":\"<p>Specifies the amount of time each device has to finish its execution of the job. A timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the timer expires, it will be automatically set to <code>TIMED_OUT</code>.</p>\"\
     },\
     \"AwsJobTimeoutInProgressTimeoutInMinutes\":{\"type\":\"long\"},\
+    \"BatchMode\":{\"type\":\"boolean\"},\
     \"Behavior\":{\
       \"type\":\"structure\",\
       \"required\":[\"name\"],\
@@ -9137,6 +9141,10 @@
         \"separator\":{\
           \"shape\":\"FirehoseSeparator\",\
           \"documentation\":\"<p>A character separator that will be used to separate records written to the Firehose stream. Valid values are: '\\\\n' (newline), '\\\\t' (tab), '\\\\r\\\\n' (Windows newline), ',' (comma).</p>\"\
+        },\
+        \"batchMode\":{\
+          \"shape\":\"BatchMode\",\
+          \"documentation\":\"<p>Whether to deliver the Kinesis Data Firehose stream as a batch by using <a href=\\\"https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html\\\"> <code>PutRecordBatch</code> </a>. The default value is <code>false</code>.</p> <p>When <code>batchMode</code> is <code>true</code> and the rule's SQL statement evaluates to an Array, each Array element forms one record in the <a href=\\\"https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html\\\"> <code>PutRecordBatch</code> </a> request. The resulting array can't have more than 500 records.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes an action that writes data to an Amazon Kinesis Firehose stream.</p>\"\
@@ -9844,6 +9852,10 @@
           \"shape\":\"ChannelName\",\
           \"documentation\":\"<p>The name of the IoT Analytics channel to which message data will be sent.</p>\"\
         },\
+        \"batchMode\":{\
+          \"shape\":\"BatchMode\",\
+          \"documentation\":\"<p>Whether to process the action as a batch. The default value is <code>false</code>.</p> <p>When <code>batchMode</code> is <code>true</code> and the rule SQL statement evaluates to an Array, each Array element is delivered as a separate message when passed by <a href=\\\"https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_BatchPutMessage.html\\\"> <code>BatchPutMessage</code> </a> to the AWS IoT Analytics channel. The resulting array can't have more than 100 messages.</p>\"\
+        },\
         \"roleArn\":{\
           \"shape\":\"AwsArn\",\
           \"documentation\":\"<p>The ARN of the role which has a policy that grants IoT Analytics permission to send message data via IoT Analytics (iotanalytics:BatchPutMessage).</p>\"\
@@ -9864,7 +9876,11 @@
         },\
         \"messageId\":{\
           \"shape\":\"MessageId\",\
-          \"documentation\":\"<p>[Optional] Use this to ensure that only one input (message) with a given messageId will be processed by an AWS IoT Events detector.</p>\"\
+          \"documentation\":\"<p>The ID of the message. The default <code>messageId</code> is a new UUID value.</p> <p>When <code>batchMode</code> is <code>true</code>, you can't specify a <code>messageId</code>--a new UUID value will be assigned.</p> <p>Assign a value to this property to ensure that only one input (message) with a given <code>messageId</code> will be processed by an AWS IoT Events detector.</p>\"\
+        },\
+        \"batchMode\":{\
+          \"shape\":\"BatchMode\",\
+          \"documentation\":\"<p>Whether to process the event actions as a batch. The default value is <code>false</code>.</p> <p>When <code>batchMode</code> is <code>true</code>, you can't specify a <code>messageId</code>. </p> <p>When <code>batchMode</code> is <code>true</code> and the rule SQL statement evaluates to an Array, each Array element is treated as a separate message when it's sent to AWS IoT Events by calling <a href=\\\"https://docs.aws.amazon.com/iotevents/latest/apireference/API_iotevents-data_BatchPutMessage.html\\\"> <code>BatchPutMessage</code> </a>. The resulting array can't have more than 10 messages.</p>\"\
         },\
         \"roleArn\":{\
           \"shape\":\"AwsArn\",\
@@ -10715,7 +10731,7 @@
       \"members\":{\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -10742,7 +10758,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       }\
     },\
@@ -11382,7 +11398,7 @@
       \"members\":{\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -11410,7 +11426,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       },\
       \"documentation\":\"<p>The output from the ListPrincipalThings operation.</p>\"\
@@ -11676,7 +11692,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         }\
@@ -11691,7 +11707,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       }\
     },\
@@ -11781,7 +11797,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -11802,7 +11818,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       }\
     },\
@@ -11811,7 +11827,7 @@
       \"members\":{\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -11850,7 +11866,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results. Will not be returned if operation has returned all results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>\"\
         }\
       }\
     },\
@@ -11858,6 +11874,18 @@
       \"type\":\"structure\",\
       \"required\":[\"thingName\"],\
       \"members\":{\
+        \"nextToken\":{\
+          \"shape\":\"NextToken\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
+          \"location\":\"querystring\",\
+          \"locationName\":\"nextToken\"\
+        },\
+        \"maxResults\":{\
+          \"shape\":\"RegistryMaxResults\",\
+          \"documentation\":\"<p>The maximum number of results to return in this operation.</p>\",\
+          \"location\":\"querystring\",\
+          \"locationName\":\"maxResults\"\
+        },\
         \"thingName\":{\
           \"shape\":\"ThingName\",\
           \"documentation\":\"<p>The name of the thing.</p>\",\
@@ -11873,6 +11901,10 @@
         \"principals\":{\
           \"shape\":\"Principals\",\
           \"documentation\":\"<p>The principals associated with the thing.</p>\"\
+        },\
+        \"nextToken\":{\
+          \"shape\":\"NextToken\",\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       },\
       \"documentation\":\"<p>The output from the ListThingPrincipals operation.</p>\"\
@@ -11898,7 +11930,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -11923,7 +11955,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       }\
     },\
@@ -11932,7 +11964,7 @@
       \"members\":{\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -11959,7 +11991,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       }\
     },\
@@ -11968,7 +12000,7 @@
       \"members\":{\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -12013,7 +12045,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -12034,7 +12066,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results. Will not be returned if operation has returned all results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>\"\
         }\
       }\
     },\
@@ -12056,7 +12088,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -12077,7 +12109,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       }\
     },\
@@ -12086,7 +12118,7 @@
       \"members\":{\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -12126,7 +12158,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results. Will not be returned if operation has returned all results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results. Will not be returned if operation has returned all results.</p>\"\
         }\
       },\
       \"documentation\":\"<p>The output from the ListThings operation.</p>\"\
@@ -12142,7 +12174,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         }\
@@ -12157,7 +12189,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token to retrieve the next set of results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       }\
     },\
@@ -12178,7 +12210,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>A token used to retrieve the next value.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -12200,7 +12232,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>A token used to retrieve the next value.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       },\
       \"documentation\":\"<p>The output from the ListTopicRules operation.</p>\"\
@@ -12216,7 +12248,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\",\
+          \"documentation\":\"<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise <b>null</b> to receive the first set of results.</p>\",\
           \"location\":\"querystring\",\
           \"locationName\":\"nextToken\"\
         },\
@@ -12237,7 +12269,7 @@
         },\
         \"nextToken\":{\
           \"shape\":\"NextToken\",\
-          \"documentation\":\"<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
+          \"documentation\":\"<p>The token to use to get the next set of results, or <b>null</b> if there are no additional results.</p>\"\
         }\
       }\
     },\
@@ -13763,7 +13795,7 @@
         },\
         \"key\":{\
           \"shape\":\"Key\",\
-          \"documentation\":\"<p>The object key.</p>\"\
+          \"documentation\":\"<p>The object key. For more information, see <a href=\\\"https://docs.aws.amazon.com/AmazonS3/latest/dev/list_amazons3.html\\\">Actions, resources, and condition keys for Amazon S3</a>.</p>\"\
         },\
         \"cannedAcl\":{\
           \"shape\":\"CannedAccessControlList\",\
@@ -14180,7 +14212,7 @@
           \"documentation\":\"<p>The ARN of the signing role.</p>\"\
         }\
       },\
-      \"documentation\":\"<p>Use Sig V4 authorization.</p>\"\
+      \"documentation\":\"<p>For more information, see <a href=\\\"https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\\\">Signature Version 4 signing process</a>.</p>\"\
     },\
     \"Signature\":{\"type\":\"blob\"},\
     \"SignatureAlgorithm\":{\"type\":\"string\"},\

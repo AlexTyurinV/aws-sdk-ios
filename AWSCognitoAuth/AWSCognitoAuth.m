@@ -70,7 +70,7 @@ API_AVAILABLE(ios(11.0))
 
 @implementation AWSCognitoAuth
 
-NSString *const AWSCognitoAuthSDKVersion = @"2.18.1";
+NSString *const AWSCognitoAuthSDKVersion = @"2.19.1";
 
 
 static NSMutableDictionary *_instanceDictionary = nil;
@@ -688,7 +688,7 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
                     if (isProcessingRedirection) {
                         self.isHandlingRedirection = YES;
                     }
-                    
+
                     NSString *queryParameters = [self getQueryStringSuffixForParameters:self.authConfiguration.tokensUriQueryParameters];
                     NSString *url = [NSString stringWithFormat:@"%@",self.authConfiguration.tokensUri];
                     NSString *body = [NSString stringWithFormat:@"grant_type=authorization_code&client_id=%@&code=%@&redirect_uri=%@&code_verifier=%@",
@@ -718,6 +718,7 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
         }
     //} else if([urlLowerCaseString hasPrefix:signOutRedirectLowerCaseString]){
     } else if([urlLowerCaseString hasPrefix: @"btroff://sign_out"]) {
+
         if(queryItemsDict[@"error"]){
             NSString *error = queryItemsDict[@"error"];
             NSString *errorDescription = queryItemsDict[@"error_description"];
@@ -1117,8 +1118,8 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
                       idpIdentifier:(nullable NSString *) idpIdentifier
            userPoolIdForEnablingASF:(nullable NSString *) userPoolIdForEnablingASF
      enableSFAuthSessionIfAvailable:(BOOL) enableSFAuthSession  {
-    
-    
+
+
     return [self initWithAppClientIdInternal:appClientId
                              appClientSecret:appClientSecret
                                       scopes:scopes
@@ -1195,7 +1196,7 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
                          isProviderExternal:(BOOL) isProviderExternal
                cognitoUserPoolServiceConfig:(nullable AWSServiceConfiguration *) serviceConfig {
     if (self = [super init]) {
-        
+
         if (!isProviderExternal) {
             _signInUri = [NSString stringWithFormat:@"%@/oauth2/authorize", webDomain];
             _signOutUri = [NSString stringWithFormat:@"%@/logout", webDomain];
@@ -1207,7 +1208,7 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
             _tokensUri = tokensUri;
             _signOutUriQueryParameters = signOutUriQueryParameters;
         }
-        
+
         _appClientId = appClientId;
         _appClientSecret = appClientSecret;
         _scopes = scopes;
@@ -1223,7 +1224,7 @@ static NSString * AWSCognitoAuthAsfDeviceId = @"asf.device.id";
         _isAuthProviderExternal = isProviderExternal;
         _userPoolConfig = serviceConfig;
     }
-    
+
     return self;
 }
 

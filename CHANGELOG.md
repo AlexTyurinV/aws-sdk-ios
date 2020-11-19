@@ -2,11 +2,46 @@
 
 ## Unreleased
 
--Features for next release
+### Misc. Updates
+
+- Model updates for the following services
+  - AWSPolly
+  - AWSIoT
+  - AWSElasticLoadBalancing
+  - AWSTextract
+  - AWSSNS
+  - AWSConnect
+  - AWSEC2
+
+## 2.19.1
+
+### Bug fixes
+
+- Fixed an issue where id token is not refreshed automatically for customers who set short custom expiration intervals (See [Issue #869](https://github.com/aws-amplify/amplify-ios/issues/869), [PR #3220](https://github.com/aws-amplify/aws-sdk-ios/pull/3220/))
+
+### Misc. Updates
+
+- Model updates for the following services
+  - AWSAutoScaling
+  - AWSElasticLoadBalancing
+  - AWSEC2
+  - AWSDynamoDB
+  
+## 2.19.0
 
 ### Breaking Changes
 - **Amazon Cognito**
   - **Breaking Change** Custom auth now sets the correct `username` after a sign in flow. Before, if a user signed in with an alias (for example, an email) in a custom auth sign in flow, after a successful signIn, `AWSMobileClient.default().username` would return that entered alias. This has been fixed in this release to conform to the behavior in the standard SRP flow: instead of the returning the alias, `AWSMobileClient.default().username` will return the actual Cognito username of the user. (See [Issue #3194](https://github.com/aws-amplify/aws-sdk-ios/issues/3194), [PR #3198](https://github.com/aws-amplify/aws-sdk-ios/pull/3198))
+
+### Misc
+- AWS IoT: optimistic workaround for cleaning up nsoutputstream (See [Issue #2770](https://github.com/aws-amplify/aws-sdk-ios/issues/2770), [PR #3208](https://github.com/aws-amplify/aws-sdk-ios/pull/3208))
+- Build project with Xcode 12.1
+- Model updates for the following services
+  - Amazon DynamoDB
+  - AWS Auto Scaling
+  - Amazon EC2
+  - AWS IoT
+  - Amazon Lambda
 
 ## 2.18.1
 
@@ -37,9 +72,16 @@
 - `AWSPinpointEndpointProfileUser` now supports adding user attributes (See [Issue #3086](https://github.com/aws-amplify/aws-sdk-ios/issues/3086), [PR #3142](https://github.com/aws-amplify/aws-sdk-ios/pull/3142))
 
 ### Bug fixes
-- Fix decoding claims that contain special characters ([PR #2928](https://github.com/aws-amplify/aws-sdk-ios/pull/2928)) Thanks @rolisanchez!
-- Fixed link for `AWSTask` documentation (See [Issue #3171](https://github.com/aws-amplify/aws-sdk-ios/issues/3171), [PR #3177](https://github.com/aws-amplify/aws-sdk-ios/pull/3177))
-- Fixed cancel signout that takes the app into an inconsistent state (See [Issue #2886](https://github.com/aws-amplify/aws-sdk-ios/issues/2886), [PR #3190](https://github.com/aws-amplify/aws-sdk-ios/pull/3190))
+- **AWSCore**
+  - Fixed link for `AWSTask` documentation (See [Issue #3171](https://github.com/aws-amplify/aws-sdk-ios/issues/3171), [PR #3177](https://github.com/aws-amplify/aws-sdk-ios/pull/3177))
+- **AWSMobileClient**
+  - Fix decoding claims that contain special characters ([PR #2928](https://github.com/aws-amplify/aws-sdk-ios/pull/2928)) Thanks @rolisanchez!
+  - Gracefully error out if idToken is not returned from service (See [Issue #2961](https://github.com/aws-amplify/aws-sdk-ios/issues/2961), [PR #3090](https://github.com/aws-amplify/aws-sdk-ios/pull/3090))
+  - Fixed cancel signout that takes the app into an inconsistent state (See [Issue #2886](https://github.com/aws-amplify/aws-sdk-ios/issues/2886), [PR #3190](https://github.com/aws-amplify/aws-sdk-ios/pull/3190))
+- **AWSPinpoint**
+  - End AWSPinpoint background task when app enters foreground (See [Issue #2651](https://github.com/aws-amplify/aws-sdk-ios/issues/2651), [PR #3084](https://github.com/aws-amplify/aws-sdk-ios/pull/3084))
+- **AWSS3TransferUtility**
+  - Register S3TransferUtility prior to async loading (See [Issue #2962](https://github.com/aws-amplify/aws-sdk-ios/issues/2962), [PR #3135](https://github.com/aws-amplify/aws-sdk-ios/pull/3135))
 
 ### Misc. Updates
 - Model updates for the following services
